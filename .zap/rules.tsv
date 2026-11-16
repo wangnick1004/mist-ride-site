@@ -1,0 +1,5 @@
+10055	WARN	(CSP: script-src unsafe-inline — 已知取捨：Next.js 靜態頁面需要內嵌腳本，見 docs/security-report.md)
+10049	IGNORE	(Non-Storable / Storable Content — 快取資訊，非漏洞)
+10027	IGNORE	(Information Disclosure - Suspicious Comments — 打包後的框架程式碼註解)
+10109	IGNORE	(Modern Web Application — 資訊性提示)
+10035	IGNORE	(HSTS — 本機 CI 使用 http，HSTS 只在正式 HTTPS 環境送出)

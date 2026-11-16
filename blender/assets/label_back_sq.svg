@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1060 1060" width="2048" height="2048"><rect width="1060" height="1060" fill="#F5F0E6"/><g transform="translate(230.0 0.0)">
+  <!-- 罐身背面印刷：弧長約 34 mm × 高 60 mm（110° 弧，r = 17.6 mm） -->
+  <rect width="600" height="1060" fill="#F5F0E6"/>
+  <g font-family="PingFang TC, Noto Sans TC, sans-serif" fill="#1F5F5B">
+    <text x="50" y="110" font-size="44" font-weight="700">使用方式</text>
+    <text x="50" y="180" font-size="30">洗臉後，閉上眼睛，</text>
+    <text x="50" y="226" font-size="30">距臉約 20 公分輕壓噴頭，</text>
+    <text x="50" y="272" font-size="30">輕拍至吸收。可倒置使用。</text>
+    <rect x="50" y="318" width="500" height="3" fill="#7FBFB3"/>
+    <text x="50" y="400" font-size="44" font-weight="700">注意事項</text>
+    <text x="50" y="470" font-size="30">・加壓容器，請勿置於 50°C 以上</text>
+    <text x="50" y="516" font-size="30">　環境，勿放機車坐墊下。</text>
+    <text x="50" y="568" font-size="30">・避免噴向眼、口、鼻。</text>
+    <text x="50" y="620" font-size="30">・請勿刺穿或焚燒。</text>
+    <text x="50" y="672" font-size="30">・不含防曬，日間請另擦防曬。</text>
+    <rect x="50" y="716" width="500" height="3" fill="#7FBFB3"/>
+    <text x="50" y="790" font-size="28" fill="#5E7377">全成分：依定案配方標示</text>
+    <text x="50" y="836" font-size="28" fill="#5E7377">內容物以壓縮空氣推出，</text>
+    <text x="50" y="882" font-size="28" fill="#5E7377">化妝水不接觸氣體。</text>
+    <text x="50" y="970" font-size="26" fill="#5E7377">用畢可回收鋁罐 ♻</text>
+  </g>
+</g></svg>

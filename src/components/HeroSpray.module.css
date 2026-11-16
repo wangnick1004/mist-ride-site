@@ -1,0 +1,135 @@
+.hero {
+  position: relative;
+  height: 320vh;
+}
+
+.sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100svh;
+  overflow: hidden;
+  background: var(--paper);
+}
+
+.stage {
+  position: absolute;
+  inset: 0;
+  will-change: transform;
+}
+
+.photo {
+  object-fit: cover;
+}
+
+.mist {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* 讓左側標題在照片上清楚可讀 */
+.shade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(245, 240, 230, 0.95) 0%, rgba(245, 240, 230, 0.86) 30%, rgba(245, 240, 230, 0.45) 44%, rgba(245, 240, 230, 0) 56%);
+  pointer-events: none;
+}
+
+.bloom,
+.whiteout {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.whiteout {
+  background: var(--paper);
+}
+
+.copy {
+  position: absolute;
+  left: clamp(16px, 7vw, 112px);
+  top: 50%;
+  translate: 0 -50%;
+  max-width: min(34rem, 40vw);
+  will-change: opacity, transform;
+}
+
+.kicker {
+  color: var(--brand);
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  font-size: 0.9rem;
+}
+
+.copy h1 {
+  font-family: var(--font-serif);
+  font-size: clamp(2.2rem, 3.9vw, 3.6rem);
+  line-height: 1.25;
+  color: var(--brand-deep);
+  margin: 0.4em 0 0.5em;
+}
+
+.lead {
+  line-height: 1.9;
+  color: var(--ink);
+  font-size: 1.05rem;
+}
+
+.cue {
+  position: absolute;
+  left: 50%;
+  bottom: 28px;
+  translate: -50% 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.85rem;
+  letter-spacing: 0.12em;
+  color: var(--brand-deep);
+}
+
+.cue span {
+  animation: bob 1.6s ease-in-out infinite;
+}
+
+@keyframes bob {
+  50% {
+    transform: translateY(6px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cue span {
+    animation: none;
+  }
+}
+
+@media (max-width: 860px) {
+  .shade {
+    background: linear-gradient(0deg, rgba(245, 240, 230, 0.95) 0%, rgba(245, 240, 230, 0.75) 34%, rgba(245, 240, 230, 0) 60%);
+  }
+
+  .copy {
+    top: auto;
+    bottom: 76px;
+    translate: none;
+    left: 16px;
+    right: 16px;
+    max-width: none;
+  }
+
+  .copy h1 {
+    font-size: 2rem;
+    margin: 0.3em 0 0.4em;
+  }
+
+  .lead {
+    font-size: 0.95rem;
+    line-height: 1.75;
+  }
+}

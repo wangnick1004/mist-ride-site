@@ -1,0 +1,89 @@
+# 每次推送與 Pull Request：型別檢查、Lint、套件漏洞、建置，
+# 再用真的 PostgreSQL 啟動正式版網站，跑資安自動化測試與 OWASP ZAP 基本掃描。
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: shunlu
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 5s --health-timeout 5s --health-retries 10
+    env:
+      DATABASE_URL: postgres://postgres:postgres@localhost:5432/shunlu?sslmode=disable
+      NEXT_TELEMETRY_DISABLED: "1"
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: 型別檢查與 Lint
+        run: |
+          npx tsc --noEmit
+          npm run lint
+
+      - name: 正式環境套件漏洞（高風險以上就失敗）
+        run: npm audit --omit=dev --audit-level=high
+
+      - name: 建立資料表
+        run: npm run db:migrate
+
+      - name: 產生 CI 專用的臨時密鑰與後台密碼
+        run: |
+          PW=$(node -e "console.log(require('crypto').randomBytes(18).toString('base64url'))")
+          echo "::add-mask::$PW"
+          echo "ADMIN_PASSWORD=$PW" >> "$GITHUB_ENV"
+          echo "$PW" | node scripts/hash-password.mjs >> "$GITHUB_ENV"
+          echo "SESSION_SECRET=$(node -e "console.log(require('crypto').randomBytes(32).toString('base64url'))")" >> "$GITHUB_ENV"
+
+      - name: 建置
+        run: npm run build
+
+      - name: 啟動正式版網站
+        run: |
+          npm start -- -p 3000 > server.log 2>&1 &
+          npx --yes wait-on@8 http://localhost:3000 --timeout 60000
+
+      - name: 資安自動化測試
+        env:
+          BASE_URL: http://localhost:3000
+        run: npm run test:security
+
+      - name: OWASP ZAP 基本掃描
+        uses: zaproxy/action-baseline@v0.14.0
+        with:
+          target: http://localhost:3000
+          rules_file_name: .zap/rules.tsv
+          cmd_options: "-a -j"
+          allow_issue_writing: false
+          fail_action: true
+          artifact_name: zap-report
+
+      - name: 伺服器紀錄（失敗時查看）
+        if: failure()
+        run: tail -n 200 server.log

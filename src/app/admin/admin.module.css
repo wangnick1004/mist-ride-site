@@ -1,0 +1,183 @@
+.page {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 40px 16px 80px;
+  font-size: 0.92rem;
+}
+
+.loading {
+  color: var(--ink-soft);
+}
+
+.head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.head h1 {
+  font-family: var(--font-serif);
+  color: var(--brand-deep);
+  font-size: 1.8rem;
+}
+
+.head p {
+  color: var(--ink-soft);
+}
+
+.headActions {
+  display: flex;
+  gap: 10px;
+}
+
+.button,
+.buttonGhost,
+.loginForm button {
+  font: inherit;
+  padding: 9px 18px;
+  border-radius: 999px;
+  border: 1px solid var(--brand);
+  background: var(--brand);
+  color: #fff;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.buttonGhost {
+  background: transparent;
+  color: var(--brand-deep);
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+  margin-bottom: 28px;
+}
+
+.stats > div {
+  padding: 16px 18px;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: inset 0 0 0 1px var(--line);
+}
+
+.stats h2,
+.tableWrap h2,
+.audit h2 {
+  font-size: 0.95rem;
+  color: var(--brand-deep);
+  margin-bottom: 8px;
+}
+
+.stats ul,
+.audit ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 4px;
+}
+
+.stats li {
+  display: flex;
+  justify-content: space-between;
+}
+
+.tableWrap {
+  overflow-x: auto;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: inset 0 0 0 1px var(--line);
+  padding: 16px;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  white-space: nowrap;
+}
+
+.table th,
+.table td {
+  text-align: left;
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--line);
+}
+
+.table th {
+  color: var(--ink-soft);
+  font-weight: 500;
+}
+
+.table code {
+  font-size: 0.85rem;
+}
+
+.rowActions {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.rowActions select {
+  font: inherit;
+  padding: 4px 6px;
+  border-radius: 8px;
+}
+
+.danger {
+  font: inherit;
+  padding: 4px 10px;
+  border-radius: 8px;
+  border: 1px solid #c98b7c;
+  background: #fff;
+  color: #a1442e;
+  cursor: pointer;
+}
+
+.audit {
+  margin-top: 28px;
+  color: var(--ink-soft);
+  font-size: 0.85rem;
+}
+
+.loginPage {
+  max-width: 380px;
+  margin: 12vh auto;
+  padding: 0 16px;
+}
+
+.loginPage h1 {
+  font-family: var(--font-serif);
+  color: var(--brand-deep);
+}
+
+.loginPage > p {
+  color: var(--ink-soft);
+  margin: 4px 0 20px;
+}
+
+.loginForm {
+  display: grid;
+  gap: 12px;
+}
+
+.loginForm label {
+  display: grid;
+  gap: 6px;
+}
+
+.loginForm input {
+  font: inherit;
+  padding: 11px 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(31, 95, 91, 0.25);
+}
+
+.loginForm p {
+  color: #a1442e;
+}

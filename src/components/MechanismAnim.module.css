@@ -1,0 +1,480 @@
+/* ---------- 主角成分的水滴動畫 ---------- */
+.figure {
+  margin: 0 0 18px;
+  width: 100%;
+  max-width: 220px;
+}
+
+.svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.dropShape {
+  filter: drop-shadow(0 10px 18px rgba(31, 122, 109, 0.18));
+  transform-box: fill-box;
+  transform-origin: 50% 90%;
+  animation: jelly 4.8s ease-in-out infinite;
+}
+
+.rim {
+  fill: none;
+  stroke: rgba(31, 122, 109, 0.22);
+  stroke-width: 1.2;
+}
+
+.skin {
+  fill: #f1ddd0;
+}
+
+.skinLine {
+  fill: none;
+  stroke: #d9b9a6;
+  stroke-width: 1.5;
+}
+
+.tag {
+  font-size: 11px;
+  font-weight: 700;
+  fill: var(--brand-deep);
+  letter-spacing: 0.08em;
+}
+
+.caption {
+  margin-top: 6px;
+  font-size: 0.75rem;
+  color: var(--ink-soft);
+  letter-spacing: 0.06em;
+}
+
+/* 菸鹼醯胺：油光縮小、細霧落下 */
+.oil {
+  fill: #e9b24f;
+  opacity: 0.85;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: oilShrink 5s ease-in-out infinite;
+}
+
+.mist {
+  fill: #7fbfb3;
+  animation: mistFall 1.9s ease-in infinite;
+}
+
+.arrowDown {
+  fill: var(--brand);
+}
+
+/* 依克多因：水分子聚攏成一圈 */
+.spin {
+  transform-box: view-box;
+  transform-origin: 100px 88px;
+  animation: spin 14s linear infinite;
+}
+
+.ectoin polygon {
+  fill: var(--brand);
+  opacity: 0.85;
+}
+
+.shell {
+  fill: none;
+  stroke: rgba(127, 191, 179, 0.6);
+  stroke-width: 9;
+  opacity: 0;
+  animation: shellOn 5s ease-in-out infinite;
+}
+
+.waterOrbit {
+  animation: gather 5s cubic-bezier(0.3, 0.6, 0.3, 1) infinite;
+}
+
+.water {
+  fill: #7ec8e3;
+  stroke: #fff;
+  stroke-width: 1.2;
+}
+
+/* 綠茶 EGCG：自由基被防護弧攔下 */
+.shieldArc {
+  fill: none;
+  stroke: var(--brand-soft);
+  stroke-width: 5;
+  stroke-linecap: round;
+  stroke-dasharray: 4 7;
+  animation: shieldPulse 3s ease-in-out infinite;
+}
+
+.leaf {
+  fill: #6aa56b;
+}
+
+.leafVein {
+  fill: none;
+  stroke: #e8f2e4;
+  stroke-width: 1.2;
+}
+
+.radical {
+  animation: radicalPath 3s ease-in infinite;
+}
+
+.spiky {
+  fill: #8a7f9a;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: spikyOut 3s linear infinite;
+}
+
+.calm {
+  fill: #7fbfb3;
+  opacity: 0;
+  animation: calmIn 3s linear infinite;
+}
+
+/* 進入畫面前暫停，進入後播放 */
+.dropShape,
+.oil,
+.mist,
+.spin,
+.shell,
+.waterOrbit,
+.shieldArc,
+.radical,
+.spiky,
+.calm {
+  animation-play-state: paused;
+}
+
+[data-visible="true"] .dropShape,
+[data-visible="true"] .oil,
+[data-visible="true"] .mist,
+[data-visible="true"] .spin,
+[data-visible="true"] .shell,
+[data-visible="true"] .waterOrbit,
+[data-visible="true"] .shieldArc,
+[data-visible="true"] .radical,
+[data-visible="true"] .spiky,
+[data-visible="true"] .calm {
+  animation-play-state: running;
+}
+
+/* 滑過卡片時水滴輕輕彈一下 */
+li:hover .dropShape {
+  animation-duration: 1.6s;
+}
+
+@keyframes jelly {
+  0%,
+  100% {
+    transform: scale(1, 1);
+  }
+  45% {
+    transform: scale(1.03, 0.97);
+  }
+  60% {
+    transform: scale(0.98, 1.02);
+  }
+}
+
+@keyframes oilShrink {
+  0%,
+  12% {
+    transform: scale(1);
+    opacity: 0.9;
+  }
+  70%,
+  88% {
+    transform: scale(0.38);
+    opacity: 0.35;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0.9;
+  }
+}
+
+@keyframes mistFall {
+  0% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+  15% {
+    opacity: 0.9;
+  }
+  100% {
+    transform: translateY(74px);
+    opacity: 0;
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes gather {
+  0% {
+    transform: translateX(46px);
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  55%,
+  85% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(46px);
+    opacity: 0;
+  }
+}
+
+@keyframes shellOn {
+  0%,
+  40% {
+    opacity: 0;
+  }
+  60%,
+  85% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes shieldPulse {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  45% {
+    opacity: 1;
+  }
+}
+
+@keyframes radicalPath {
+  0% {
+    transform: translate(var(--sx), var(--sy));
+  }
+  45% {
+    transform: translate(var(--ex), var(--ey));
+  }
+  100% {
+    transform: translate(calc(var(--ex) + 6px), calc(var(--ey) - 20px));
+  }
+}
+
+@keyframes spikyOut {
+  0%,
+  42% {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
+  }
+  50%,
+  100% {
+    opacity: 0;
+    transform: rotate(180deg) scale(0.3);
+  }
+}
+
+@keyframes calmIn {
+  0%,
+  44% {
+    opacity: 0;
+  }
+  52% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* ---------- 配角成分的小圖示 ---------- */
+.icon {
+  width: 44px;
+  height: 44px;
+  flex: none;
+  overflow: visible;
+}
+
+.iconBg {
+  fill: var(--mist);
+}
+
+.iconDrop path {
+  fill: #7ec8e3;
+}
+
+.iconDrop {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: bob 2.6s ease-in-out infinite;
+}
+
+.iconTrack {
+  fill: none;
+  stroke: rgba(31, 95, 91, 0.25);
+  stroke-width: 3;
+  stroke-linecap: round;
+}
+
+.iconBand {
+  fill: none;
+  stroke: var(--brand);
+  stroke-width: 3.4;
+  stroke-linecap: round;
+}
+
+.iconNeedle {
+  stroke: var(--brand-deep);
+  stroke-width: 2;
+  stroke-linecap: round;
+  transform-box: view-box;
+  transform-origin: 24px 30px;
+  animation: needle 3.4s ease-in-out infinite;
+}
+
+.iconDot {
+  fill: var(--brand-deep);
+}
+
+.iconText {
+  font-size: 6.5px;
+  font-weight: 700;
+  fill: var(--brand-deep);
+}
+
+.iconGuard {
+  fill: var(--brand);
+  opacity: 0.85;
+}
+
+.iconMicrobe {
+  fill: #8a7f9a;
+  animation: bounceOff 2.8s ease-in-out infinite;
+}
+
+.iconIon {
+  fill: #b88a4a;
+}
+
+.iconClawL,
+.iconClawR {
+  fill: none;
+  stroke: var(--brand);
+  stroke-width: 3.2;
+  stroke-linecap: round;
+}
+
+.iconClawL {
+  animation: clawL 2.8s ease-in-out infinite;
+}
+
+.iconClawR {
+  animation: clawR 2.8s ease-in-out infinite;
+}
+
+@keyframes bob {
+  50% {
+    transform: translateY(-3px) scale(1.04, 0.96);
+  }
+}
+
+@keyframes needle {
+  0% {
+    transform: rotate(-70deg);
+  }
+  35% {
+    transform: rotate(25deg);
+  }
+  55% {
+    transform: rotate(-12deg);
+  }
+  70%,
+  100% {
+    transform: rotate(-6deg);
+  }
+}
+
+@keyframes bounceOff {
+  0%,
+  100% {
+    transform: translate(0, 0);
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  45% {
+    transform: translate(-6px, 6px);
+  }
+  70% {
+    transform: translate(4px, -4px);
+    opacity: 0.6;
+  }
+}
+
+@keyframes clawL {
+  0%,
+  100% {
+    transform: translateX(-3px);
+  }
+  50% {
+    transform: translateX(5px);
+  }
+}
+
+@keyframes clawR {
+  0%,
+  100% {
+    transform: translateX(3px);
+  }
+  50% {
+    transform: translateX(-5px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dropShape,
+  .oil,
+  .mist,
+  .spin,
+  .shell,
+  .waterOrbit,
+  .shieldArc,
+  .radical,
+  .spiky,
+  .calm,
+  .iconDrop,
+  .iconNeedle,
+  .iconMicrobe,
+  .iconClawL,
+  .iconClawR {
+    animation: none;
+  }
+
+  .shell,
+  .calm {
+    opacity: 1;
+  }
+
+  .mist {
+    opacity: 0.6;
+  }
+
+  .radical {
+    transform: translate(var(--ex), var(--ey));
+  }
+
+  .spiky {
+    opacity: 0;
+  }
+}

@@ -1,0 +1,17 @@
+# Dependabot：套件有安全更新時自動開 Pull Request。
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 10
+    groups:
+      dev-tools:
+        dependency-type: development
+      three:
+        patterns: ["three", "@react-three/*", "@types/three"]
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly

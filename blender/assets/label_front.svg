@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 1020" width="1200" height="2040">
+  <!-- 罐身正面印刷：弧長約 40 mm × 高 68 mm（130° 弧，r = 17.6 mm） -->
+  <rect width="600" height="1020" fill="#F5F0E6"/>
+  <rect x="18" y="18" width="564" height="984" rx="26" fill="none" stroke="#7FBFB3" stroke-width="3"/>
+  <!-- 商標：安全帽弧線、帽簷、道路線、晨霧點 -->
+  <g transform="translate(300 300)">
+    <path d="M-110 0 A110 110 0 0 1 110 0 Z" fill="#1F7A6D"/>
+    <rect x="-128" y="0" width="256" height="20" rx="10" fill="#1F7A6D"/>
+    <path d="M-96 62 L96 62" stroke="#1F7A6D" stroke-width="16" stroke-linecap="round" stroke-dasharray="46 30"/>
+    <circle cx="-60" cy="118" r="9" fill="#7FBFB3"/>
+    <circle cx="0" cy="118" r="9" fill="#7FBFB3"/>
+    <circle cx="60" cy="118" r="9" fill="#7FBFB3"/>
+  </g>
+  <text x="300" y="590" text-anchor="middle" font-family="PingFang TC, Noto Sans TC, sans-serif" font-size="128" font-weight="700" fill="#1F5F5B" letter-spacing="24">順路</text>
+  <text x="300" y="672" text-anchor="middle" font-family="PingFang TC, Noto Sans TC, sans-serif" font-size="46" font-weight="600" fill="#1F7A6D" letter-spacing="4">晨霧 控油化妝水</text>
+  <rect x="230" y="706" width="140" height="6" rx="3" fill="#7FBFB3"/>
+  <text x="300" y="770" text-anchor="middle" font-family="PingFang TC, Noto Sans TC, sans-serif" font-size="32" fill="#5E7377">控油・保濕・通勤前 10 秒</text>
+  <text x="300" y="900" text-anchor="middle" font-family="Helvetica Neue, sans-serif" font-size="40" fill="#1F5F5B">50 mL</text>
+  <text x="300" y="952" text-anchor="middle" font-family="Helvetica Neue, PingFang TC, sans-serif" font-size="22" fill="#5E7377" letter-spacing="3">BAG-ON-VALVE ・ 壓縮空氣</text>
+</svg>

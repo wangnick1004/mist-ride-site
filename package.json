@@ -6,17 +6,36 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "model:build": "/Applications/Blender.app/Contents/MacOS/Blender -b -P blender/build_bov_can.py -- --out blender/build/bov-can.raw.glb",
+    "model:optimize": "gltf-transform optimize blender/build/bov-can.raw.glb public/models/bov-can.glb --compress meshopt --texture-compress webp --texture-size 2048 --join false --flatten false --instance false --palette false --simplify false",
+    "model": "npm run model:build && npm run model:optimize",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "admin:hash": "node scripts/hash-password.mjs",
+    "test:security": "node --test tests/security.test.mjs"
   },
   "dependencies": {
+    "@electric-sql/pglite": "^0.5.16",
+    "@react-three/drei": "^10.7.9",
+    "@react-three/fiber": "^9.8.2",
+    "drizzle-orm": "^0.45.4",
     "next": "16.4.6",
+    "pg": "^8.23.1",
     "react": "19.3.0",
-    "react-dom": "19.3.0"
+    "react-dom": "19.3.0",
+    "server-only": "^0.0.1",
+    "three": "^0.187.0",
+    "zod": "^4.6.7"
   },
   "devDependencies": {
+    "@gltf-transform/cli": "^4.5.1",
     "@types/node": "^20",
+    "@types/pg": "^8.23.1",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/three": "^0.187.0",
+    "drizzle-kit": "^0.31.11",
     "eslint": "^9",
     "eslint-config-next": "16.4.6",
     "typescript": "^5"
