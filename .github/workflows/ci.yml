@@ -44,6 +44,7 @@ jobs:
 
       - name: 型別檢查與 Lint
         run: |
+          npx next typegen   # 產生 LayoutProps 等 Next.js 路由型別（本機由 dev/build 自動產生）
           npx tsc --noEmit
           npm run lint
 
@@ -86,4 +87,4 @@ jobs:
 
       - name: 伺服器紀錄（失敗時查看）
         if: failure()
-        run: tail -n 200 server.log
+        run: if [ -f server.log ]; then tail -n 200 server.log; else echo "網站尚未啟動，沒有伺服器紀錄"; fi
