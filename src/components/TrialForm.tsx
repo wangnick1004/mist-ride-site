@@ -118,7 +118,8 @@ export default function TrialForm() {
   const aria = (k: string) => (errors[k] ? { "aria-invalid": true, "aria-describedby": `${k}-err` } : {});
 
   return (
-    <form className={styles.form} onSubmit={onSubmit} noValidate>
+    // method="post"：JavaScript 尚未載入時瀏覽器會用預設方式送出，用 POST 才不會把 Email 等個資放進網址
+    <form className={styles.form} onSubmit={onSubmit} method="post" noValidate>
       <div className={styles.grid}>
         <label className={styles.field}>
           <span>稱呼</span>

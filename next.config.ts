@@ -35,6 +35,8 @@ const securityHeaders = [
   },
   { key: "Cross-Origin-Opener-Policy", value: "same-origin" },
   { key: "Cross-Origin-Resource-Policy", value: "same-origin" },
+  // 只允許嵌入同源或明確授權的資源（本站沒有任何外部資源）
+  { key: "Cross-Origin-Embedder-Policy", value: "require-corp" },
   // HSTS 只在正式環境（HTTPS）送出，本機 http 不送
   ...(isDev ? [] : [{ key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains; preload" }]),
 ];

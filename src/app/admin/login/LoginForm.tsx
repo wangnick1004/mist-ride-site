@@ -35,7 +35,8 @@ export default function LoginForm() {
   }
 
   return (
-    <form className={styles.loginForm} onSubmit={onSubmit}>
+    // method="post"：避免 JavaScript 未載入時密碼以 GET 出現在網址
+    <form className={styles.loginForm} onSubmit={onSubmit} method="post">
       <label>
         管理密碼
         <input name="password" type="password" autoComplete="current-password" required maxLength={200} />

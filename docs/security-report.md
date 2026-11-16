@@ -23,7 +23,8 @@
 | 開發工具相依套件 | 14 個中度（drizzle-kit、gltf-transform CLI、typescript-eslint 的子套件），不會進入網站，交由 Dependabot 追蹤 |
 | 原始碼中的機密資訊 | 無；`.env.local` 權限 600、已排除於 git |
 | 資安自動化測試 | **22 / 22 通過** |
-| 檢測中發現並已修正的問題 | 8 項（見第四節） |
+| 檢測中發現並已修正的問題 | 10 項（見第四節） |
+| OWASP ZAP 基本掃描（CI） | 0 失敗；警告項目已修正或標註為已檢視的取捨（`.zap/rules.tsv`） |
 
 ## 三、已具備的防護（對應 OWASP Top 10）
 
@@ -53,6 +54,8 @@
 | 6 | 低 | 稱呼可含零寬字元與雙向文字控制字元（如 U+202E），可在後台偽裝內容 | 驗證規則一併擋掉 |
 | 7 | 低 | 隱私告知承諾「期滿自動刪除」，但尚無刪除機制 | 新增 `purgeExpired()`：後台載入時與每日排程執行 |
 | 8 | 資訊 | 後台頁面在預先產生時讀取當下時間 | 標記為請求時產生（`connection()`） |
+| 9 | 中 | （OWASP ZAP 發現）JavaScript 尚未載入時，表單以 GET 送出，Email 等個資會出現在網址 | 試用表單與後台登入表單改為 `method="post"` |
+| 10 | 低 | （OWASP ZAP 建議）缺少 Cross-Origin-Embedder-Policy | 加上 `require-corp`；確認照片、3D 模型仍正常載入 |
 
 ## 五、已知取捨與殘餘風險
 
