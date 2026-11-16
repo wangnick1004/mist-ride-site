@@ -7,10 +7,17 @@ updates:
       interval: weekly
     open-pull-requests-limit: 10
     groups:
-      dev-tools:
-        dependency-type: development
+      # react 與 react-dom 版本必須完全一致，一定要放在同一個 PR 一起升級
+      react:
+        patterns: ["react", "react-dom", "@types/react", "@types/react-dom"]
       three:
         patterns: ["three", "@react-three/*", "@types/three"]
+      dev-tools:
+        dependency-type: development
+    ignore:
+      # TypeScript 7 尚未被 typescript-eslint 支援，等相容後再移除這條
+      - dependency-name: "typescript"
+        update-types: ["version-update:semver-major"]
   - package-ecosystem: github-actions
     directory: /
     schedule:
