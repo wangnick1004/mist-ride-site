@@ -5,3 +5,6 @@
 10027	IGNORE	(Information Disclosure - Suspicious Comments — 打包後的框架程式碼註解)
 10109	IGNORE	(Modern Web Application — 資訊性提示)
 10035	IGNORE	(HSTS — CI 使用 http，HSTS 只在正式 HTTPS 環境送出)
+10031	IGNORE	(User Controllable HTML Element Attribute — 誤報：比對到的是固定的 <option value="oily"> 選項，並非反射使用者輸入)
+10202	IGNORE	(Absence of Anti-CSRF Tokens — 本站以 Origin 檢查＋SameSite=Strict cookie＋只接受 JSON 防護 CSRF，見 tests/security.test.mjs 的跨站請求測試)
+10019	IGNORE	(Content-Type Header Missing — /api/ 尾斜線 308 轉址回應本來就沒有內容)
