@@ -76,7 +76,8 @@ jobs:
         run: npm run test:security
 
       - name: OWASP ZAP 基本掃描
-        uses: zaproxy/action-baseline@v0.14.0
+        # 第三方 Action 鎖定 commit 雜湊（防止標籤被改指向惡意程式碼）；Dependabot 會連同註解一起更新
+        uses: zaproxy/action-baseline@de8ad967d3548d44ef623df22cf95c3b0baf8b25 # v0.15.0
         with:
           target: http://localhost:3000
           rules_file_name: .zap/rules.tsv
