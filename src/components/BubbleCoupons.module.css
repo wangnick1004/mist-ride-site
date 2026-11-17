@@ -1,0 +1,114 @@
+.direct {
+  position: absolute;
+  z-index: 2;
+  top: 24px;
+  right: clamp(16px, 4vw, 48px);
+  font: inherit;
+  font-size: 0.8rem;
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px dashed #c99a45;
+  background: rgba(255, 248, 232, 0.85);
+  color: #8a5a12;
+  cursor: pointer;
+}
+
+.direct:hover {
+  background: #fff3d9;
+}
+
+.toast {
+  position: fixed;
+  z-index: 40;
+  left: 50%;
+  bottom: 24px;
+  translate: -50% 0;
+  width: min(380px, calc(100vw - 32px));
+  animation: rise 0.4s cubic-bezier(0.2, 0.9, 0.3, 1.2);
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.92);
+  }
+}
+
+.ticket {
+  position: relative;
+  padding: 22px 22px 20px;
+  border-radius: 22px;
+  background:
+    radial-gradient(circle at 0 50%, transparent 12px, #fffaf0 13px) left / 51% 100% no-repeat,
+    radial-gradient(circle at 100% 50%, transparent 12px, #fffaf0 13px) right / 51% 100% no-repeat;
+  filter: drop-shadow(0 18px 30px rgba(120, 80, 20, 0.25));
+  text-align: center;
+}
+
+.kicker {
+  color: #b07a1e;
+  font-weight: 700;
+  font-size: 0.82rem;
+  letter-spacing: 0.15em;
+}
+
+.ticket h3 {
+  font-family: var(--font-serif);
+  color: var(--brand-deep);
+  font-size: 1.4rem;
+  margin: 4px 0 6px;
+}
+
+.detail {
+  font-size: 0.86rem;
+  color: var(--ink-soft);
+  line-height: 1.7;
+}
+
+.code {
+  margin: 12px auto 14px;
+  padding: 8px 12px;
+  border: 1px dashed #c99a45;
+  border-radius: 12px;
+  font-size: 0.86rem;
+  color: #8a5a12;
+}
+
+.code strong {
+  margin-left: 6px;
+  letter-spacing: 0.08em;
+}
+
+.line {
+  display: block;
+  padding: 12px 18px;
+  border-radius: 999px;
+  background: #06c755; /* LINE 品牌綠 */
+  color: #fff;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.line[data-line="pending"] {
+  background: var(--brand);
+}
+
+.close {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  width: 32px;
+  height: 32px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  font-size: 1.3rem;
+  color: var(--ink-soft);
+  cursor: pointer;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .toast {
+    animation: none;
+  }
+}
