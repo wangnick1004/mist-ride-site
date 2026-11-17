@@ -48,6 +48,12 @@ const nextConfig: NextConfig = {
   serverExternalPackages: ["@electric-sql/pglite", "pg"],
   // 不在回應標頭透露使用的框架
   poweredByHeader: false,
+  // 資料庫 migration 檔在執行時才讀取（啟動時自動建表），打包器追蹤不到，
+  // 部署到 Vercel 等 serverless 平台時要明確帶上，否則正式環境找不到檔案
+  outputFileTracingIncludes: {
+    "/api/**": ["./drizzle/**/*"],
+    "/admin": ["./drizzle/**/*"],
+  },
   async headers() {
     return [
       { source: "/:path*", headers: securityHeaders },
