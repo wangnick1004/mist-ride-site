@@ -21,12 +21,19 @@ async function createDb(): Promise<Db> {
   if (url) {
     const { Pool } = await import("pg");
     const { drizzle } = await import("drizzle-orm/node-postgres");
+    const { migrate } = await import("drizzle-orm/node-postgres/migrator");
+    // 預設強制 TLS 並驗證憑證（Neon、Supabase 等外部資料庫）。
+    // Zeabur 等平台的「內部網路」連線不走公開網路、也不提供 TLS，設定 DATABASE_SSL=disable 或在網址加 sslmode=disable。
+    const sslMode = process.env.DATABASE_SSL ?? (url.includes("sslmode=disable") ? "disable" : "verify");
     const pool = new Pool({
       connectionString: url,
       max: 5,
-      ssl: url.includes("sslmode=disable") ? false : { rejectUnauthorized: true },
+      ssl: sslMode === "disable" ? false : { rejectUnauthorized: true },
     });
-    return drizzle(pool, { schema }) as unknown as Db;
+    const db = drizzle(pool, { schema });
+    // 啟動時自動建立／更新資料表（已套用過的 migration 會略過）
+    await migrate(db, { migrationsFolder: MIGRATIONS });
+    return db as unknown as Db;
   }
   if (process.env.NODE_ENV === "production") {
     throw new Error("DATABASE_URL 未設定：正式環境不能使用本機 PGlite。");
