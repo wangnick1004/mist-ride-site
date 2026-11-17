@@ -18,6 +18,16 @@ export interface Ingredient {
   animLabel?: string;
   /** 配角成分的小圖示 */
   icon?: SupportIconKind;
+  /** 主角成分圖卡展開後的詳細說明（作用示意，非療效宣稱） */
+  detail?: IngredientDetail;
+}
+
+export interface IngredientDetail {
+  headline: string;
+  steps: { title: string; text: string }[];
+  highlights: string[];
+  evidenceNote: string;
+  pairing: string;
 }
 
 export const KEY_INGREDIENTS: Ingredient[] = [
@@ -31,6 +41,21 @@ export const KEY_INGREDIENTS: Ingredient[] = [
     evidence: ["雙盲人體試驗"],
     anim: "oil",
     animLabel: "示意：細霧落在皮膚上，油光慢慢收斂",
+    detail: {
+      headline: "安全帽一戴就悶，T 字部位很快油亮：先從調理油水平衡開始。",
+      steps: [
+        { title: "噴上", text: "細霧把 2% 菸鹼醯胺均勻帶到臉上，不需要用手大量搓揉。" },
+        { title: "作用", text: "調理肌膚油水平衡，幫助控油，讓皮膚在悶熱的安全帽裡維持清爽。" },
+        { title: "持續", text: "每天通勤前使用，控油效果需要持續使用才能感受到。" },
+      ],
+      highlights: [
+        "維生素 B3 的一種，水溶性，適合做成清爽的化妝水",
+        "濃度 2%：配方中標示清楚的實際添加量",
+        "搭配檸檬酸緩衝，把 pH 維持在 5.0–5.5，讓成分保持穩定",
+      ],
+      evidenceNote: "雙盲人體試驗：外用 2% 菸鹼醯胺可降低皮脂分泌率。本產品上市前另以皮脂測量儀進行約 4 週的功效測試。",
+      pairing: "與依克多因一起使用：一邊控油、一邊保濕，改善「外油內乾」。",
+    },
   },
   {
     name: "依克多因",
@@ -42,6 +67,21 @@ export const KEY_INGREDIENTS: Ingredient[] = [
     evidence: ["雙盲人體試驗", "體外試驗"],
     anim: "water",
     animLabel: "示意：水分子聚在依克多因周圍，形成保濕水層",
+    detail: {
+      headline: "外面騎車流汗、進教室吹冷氣：皮膚表面出油，裡面卻乾。",
+      steps: [
+        { title: "抓水", text: "依克多因會在周圍聚集水分子，形成一層「水合層」。" },
+        { title: "保濕", text: "幫助肌膚保濕，減少冷氣房裡的乾燥緊繃感。" },
+        { title: "防護", text: "體外研究顯示，它有助於減少環境微粒造成的刺激。" },
+      ],
+      highlights: [
+        "以微生物發酵技術取得，不是從動物或礦物萃取",
+        "濃度 2%：配方中的實際添加量",
+        "耐熱性需向原料商確認，決定加入製程的溫度段",
+      ],
+      evidenceNote: "保濕效果有雙盲人體試驗支持；環境微粒相關的資料來自體外（細胞）試驗，屬於成分特性，不等於產品療效。",
+      pairing: "與生物基丙二醇一起作為保濕系統，讓化妝水不需要油相也能保濕。",
+    },
   },
   {
     name: "綠茶萃取",
@@ -52,6 +92,21 @@ export const KEY_INGREDIENTS: Ingredient[] = [
     evidence: ["體外試驗"],
     anim: "shield",
     animLabel: "示意：環境刺激靠近時被攔下",
+    detail: {
+      headline: "騎車時吸的是車流廢氣與紫外線：先替皮膚多加一層防護。",
+      steps: [
+        { title: "靠近", text: "環境中的刺激會在皮膚表面產生自由基。" },
+        { title: "攔截", text: "綠茶裡的 EGCG 具有清除自由基的成分特性。" },
+        { title: "防護", text: "協助提升肌膚對環境傷害的保護力。" },
+      ],
+      highlights: [
+        "EGCG 是綠茶中含量最高的兒茶素多酚",
+        "怕光、怕熱：常溫製程最後才加入，並裝在不透光的鋁罐裡",
+        "不能取代防曬：日間仍請另外擦防曬",
+      ],
+      evidenceNote: "自由基清除能力來自體外試驗，屬於成分特性；產品的環境防護功效將以體外或離體抗污染測試另行驗證。",
+      pairing: "與植酸鈉一起：植酸鈉抓住金屬離子，減少它們催化氧化，幫 EGCG 保持穩定。",
+    },
   },
 ];
 

@@ -154,3 +154,8 @@ export function stepT(progress: number, key: StepKey): number {
 
 export const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
 export const easeInOut = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+
+/** 每個零件的名稱、材質與說明（取自組裝步驟），給「玩模型」區點選零件時顯示 */
+export const PART_INFO: Record<string, { title: string; material: string; body: string }> = Object.fromEntries(
+  STEPS.flatMap((s) => s.parts.map((p) => [p, { title: s.title, material: s.material, body: s.body }])),
+);

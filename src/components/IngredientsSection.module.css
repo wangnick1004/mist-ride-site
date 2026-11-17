@@ -1,6 +1,8 @@
 .section {
   position: relative;
   overflow: hidden;
+  /* 允許垂直捲動，水平方向的手勢交給氣泡拖曳 */
+  touch-action: pan-y;
   padding: 96px clamp(16px, 7vw, 112px) 120px;
   /* 接住上一頁霧氣的米白，往下漸漸轉成鼠尾草霧色 */
   background: linear-gradient(180deg, var(--paper) 0%, var(--paper-2) 55%, var(--paper) 100%);
