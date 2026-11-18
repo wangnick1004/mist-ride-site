@@ -1,22 +1,3 @@
-.direct {
-  position: absolute;
-  z-index: 2;
-  top: 24px;
-  right: clamp(16px, 4vw, 48px);
-  font: inherit;
-  font-size: 0.8rem;
-  padding: 6px 14px;
-  border-radius: 999px;
-  border: 1px dashed #c99a45;
-  background: rgba(255, 248, 232, 0.85);
-  color: #8a5a12;
-  cursor: pointer;
-}
-
-.direct:hover {
-  background: #fff3d9;
-}
-
 .toast {
   position: fixed;
   z-index: 40;

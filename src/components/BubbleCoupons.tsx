@@ -8,7 +8,7 @@ import styles from "./BubbleCoupons.module.css";
 
 /**
  * 氣泡層＋優惠券提示。戳破金色「優惠」泡泡時跳出優惠券，按鈕開啟官方 LINE 並預填領券關鍵字。
- * 給無法拖曳畫布的使用者（鍵盤、螢幕閱讀器）另外提供「直接領取」按鈕。
+ * 金色泡泡是可聚焦的按鈕元素，鍵盤與螢幕閱讀器使用者也能戳破。
  */
 export default function BubbleCoupons({ className }: { className?: string }) {
   const [open, setOpen] = useState(false);
@@ -31,10 +31,6 @@ export default function BubbleCoupons({ className }: { className?: string }) {
   return (
     <>
       <BubbleField className={className} onCoupon={onCoupon} />
-
-      <button type="button" className={styles.direct} onClick={onCoupon}>
-        找不到金色泡泡？直接領取優惠券
-      </button>
 
       {open && (
         <div className={styles.toast} role="dialog" aria-modal="false" aria-labelledby="coupon-title">
