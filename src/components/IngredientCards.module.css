@@ -141,7 +141,7 @@
   background: var(--paper);
   color: var(--ink);
   box-shadow: 0 40px 80px -30px rgba(20, 50, 48, 0.5);
-  overflow: auto;
+  overflow: hidden auto;
 }
 
 .dialog::backdrop {
@@ -163,6 +163,113 @@
 .sheet {
   position: relative;
   padding: clamp(20px, 4vw, 40px);
+  touch-action: pan-y;
+  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.sheet[data-dragging="true"] {
+  transition: none;
+  cursor: grabbing;
+}
+
+/* 換頁：從滑動的方向進場 */
+.sheet[data-dir="next"] {
+  animation: inFromRight 0.38s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.sheet[data-dir="prev"] {
+  animation: inFromLeft 0.38s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+@keyframes inFromRight {
+  from {
+    opacity: 0;
+    transform: translateX(48px) rotate(0.6deg);
+  }
+}
+
+@keyframes inFromLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-48px) rotate(-0.6deg);
+  }
+}
+
+/* 第一次打開：卡片像書頁一樣往左翻一下又回來，提示可以左右滑 */
+.sheet[data-peek="true"] {
+  animation: peek 1.6s 0.6s cubic-bezier(0.45, 0, 0.25, 1) both;
+}
+
+@keyframes peek {
+  0%,
+  100% {
+    transform: none;
+  }
+  30% {
+    transform: translateX(-44px) rotate(-1.2deg);
+  }
+  48% {
+    transform: translateX(6px);
+  }
+  62% {
+    transform: translateX(-16px) rotate(-0.4deg);
+  }
+  78% {
+    transform: none;
+  }
+}
+
+/* 下方的頁碼圓點 */
+.pager {
+  position: sticky;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 0 14px;
+  background: linear-gradient(180deg, transparent, var(--paper) 40%);
+}
+
+.dot {
+  width: 9px;
+  height: 9px;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: var(--brand-soft);
+  cursor: pointer;
+  transition:
+    width 0.3s,
+    background 0.3s;
+}
+
+.dot[aria-current="true"] {
+  width: 26px;
+  background: var(--brand);
+}
+
+.pageArrow {
+  width: 32px;
+  height: 32px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--brand);
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.sheet[data-peek="true"] ~ .pager .dot[aria-current="true"] + .dot {
+  animation: dotNudge 1.6s 0.6s ease;
+}
+
+@keyframes dotNudge {
+  30% {
+    background: var(--brand);
+    transform: scale(1.4);
+  }
 }
 
 .close {
@@ -196,6 +303,12 @@
 
 .sheetAnim figure {
   max-width: 320px;
+}
+
+/* 對話框裡的濃度標籤放左上，避開右上角的關閉按鈕 */
+.sheetAnim .badge {
+  right: auto;
+  left: 6px;
 }
 
 .sheetTitle {
@@ -321,7 +434,11 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .dialog[open] {
-    animation: none;
+  .dialog[open],
+  .sheet[data-dir],
+  .sheet[data-peek="true"],
+  .dot {
+    animation: none !important;
+    transition: none;
   }
 }

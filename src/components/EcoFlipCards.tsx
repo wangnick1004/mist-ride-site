@@ -1,7 +1,7 @@
 "use client";
 
-import { useId, useRef, useState, type PointerEvent as RPointerEvent, type ReactNode } from "react";
-import { ECO_FACTS, NATURAL_ROWS, NATURAL_WATER_PCT, type EcoFact } from "@/lib/ingredients";
+import { useId, useRef, useState, type CSSProperties, type PointerEvent as RPointerEvent, type ReactNode } from "react";
+import { ECO_FACTS, NATURAL_ROWS, NATURAL_WATER_PCT, naturalIndex, type EcoFact } from "@/lib/ingredients";
 import CountUp from "./CountUp";
 import Reveal from "./Reveal";
 import styles from "./EcoFlipCards.module.css";
@@ -9,29 +9,36 @@ import styles from "./EcoFlipCards.module.css";
 const STATUS_TEXT = { estimate: "暫估值", pending: "驗證中", design: "設計規格" } as const;
 const SWIPE = 60; // 左右滑超過這個距離（px）就翻面
 
-/** 永續卡片：正面是重點數字，翻面看計算方式或更深入的說明。可按按鈕，也可用手指左右滑動翻面。 */
+/**
+ * 永續卡片：正面是重點數字，翻面看計算方式或更深入的說明。
+ * 點一下正面、或用手指左右滑動就能翻面；沒有文字提示，改用卡片自己「掀一下」的小動畫讓人發現。
+ */
 export default function EcoFlipCards() {
   return (
     <ul className={styles.grid}>
       {ECO_FACTS.map((f, i) => (
         <Reveal as="li" key={f.label} delay={i * 100} className={styles.slot}>
-          <FlipCard fact={f} back={BACKS[i]} />
+          <FlipCard fact={f} back={BACKS[i]} order={i} />
         </Reveal>
       ))}
     </ul>
   );
 }
 
-function FlipCard({ fact, back }: { fact: EcoFact; back: { title: string; body: ReactNode } }) {
+function FlipCard({ fact, back, order }: { fact: EcoFact; back: { title: string; body: ReactNode }; order: number }) {
   // 用角度記錄翻面狀態：往左滑 −180°、往右滑 +180°，翻轉方向跟著手勢
   const [angle, setAngle] = useState(0);
   const [drag, setDrag] = useState(0);
+  const [touched, setTouched] = useState(false); // 使用者碰過卡片後就停止提示動畫
   const start = useRef<{ x: number; y: number; id: number; horizontal: boolean | null } | null>(null);
+  const moved = useRef(false);
   const id = useId();
   const flipped = Math.abs(Math.round(angle / 180)) % 2 === 1;
 
   const onDown = (e: RPointerEvent<HTMLDivElement>) => {
     if ((e.target as Element).closest("input, select, textarea")) return;
+    setTouched(true);
+    moved.current = false;
     start.current = { x: e.clientX, y: e.clientY, id: e.pointerId, horizontal: null };
   };
   const onMove = (e: RPointerEvent<HTMLDivElement>) => {
@@ -41,7 +48,14 @@ function FlipCard({ fact, back }: { fact: EcoFact; back: { title: string; body: 
     const dy = e.clientY - s.y;
     if (s.horizontal === null && Math.hypot(dx, dy) > 8) {
       s.horizontal = Math.abs(dx) > Math.abs(dy);
-      if (s.horizontal) e.currentTarget.setPointerCapture(e.pointerId);
+      if (s.horizontal) {
+        moved.current = true;
+        try {
+          e.currentTarget.setPointerCapture(e.pointerId);
+        } catch {
+          /* 手指已經離開或瀏覽器不允許時略過，滑動仍可運作 */
+        }
+      }
     }
     if (s.horizontal) setDrag(Math.max(-180, Math.min(180, dx * 0.6)));
   };
@@ -62,13 +76,37 @@ function FlipCard({ fact, back }: { fact: EcoFact; back: { title: string; body: 
       className={styles.card}
       data-flipped={flipped}
       data-dragging={drag !== 0}
+      data-hint={!touched}
+      style={{ "--order": order } as CSSProperties}
       onPointerDown={onDown}
       onPointerMove={onMove}
       onPointerUp={onUp}
       onPointerCancel={onUp}
     >
       <div className={styles.inner} style={{ transform: `rotateY(${angle + drag}deg)` }}>
-        <section className={styles.front} aria-hidden={flipped} inert={flipped}>
+        <section
+          className={styles.front}
+          aria-hidden={flipped}
+          inert={flipped}
+          role="button"
+          tabIndex={0}
+          aria-controls={id}
+          aria-expanded={flipped}
+          aria-label={`${fact.label}，點一下翻面看${back.title}`}
+          onClick={() => {
+            // 剛滑完手指不算點擊，避免翻兩次
+            if (moved.current) return;
+            setTouched(true);
+            setAngle((a) => a - 180);
+          }}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              setTouched(true);
+              setAngle((a) => a - 180);
+            }
+          }}
+        >
           <p className={styles.status} data-status={fact.status}>
             {STATUS_TEXT[fact.status]}
           </p>
@@ -78,12 +116,7 @@ function FlipCard({ fact, back }: { fact: EcoFact; back: { title: string; body: 
           </p>
           <h3>{fact.label}</h3>
           <p className={styles.note}>{fact.note}</p>
-          <button type="button" className={styles.flip} aria-controls={id} aria-expanded={flipped} onClick={() => setAngle((a) => a - 180)}>
-            翻面看{back.title} <span aria-hidden="true">↻</span>
-          </button>
-          <p className={styles.swipeHint} aria-hidden="true">
-            ← 也可以左右滑動翻面 →
-          </p>
+          <span className={styles.corner} aria-hidden="true" />
         </section>
 
         <section id={id} className={styles.back} aria-hidden={!flipped} inert={!flipped} aria-label={back.title}>
@@ -98,12 +131,9 @@ function FlipCard({ fact, back }: { fact: EcoFact; back: { title: string; body: 
   );
 }
 
-/** ISO 16128-2 成分明細：配方水固定 83.15%，其餘成分以顏色區分 */
+/** ISO 16128-2 成分明細：配方水為補足 100% 的餘量，其餘成分以顏色區分 */
 function NaturalIndexBreakdown() {
-  const rest = NATURAL_ROWS.reduce((a, r) => a + r.pct, 0);
-  const contrib = NATURAL_ROWS.reduce((a, r) => a + r.pct * r.index, 0);
-  const withWater = NATURAL_WATER_PCT + contrib;
-  const noWater = (contrib / rest) * 100;
+  const { rest, withWater, noWater } = naturalIndex();
   return (
     <div className={styles.calc}>
       <p>每個成分的貢獻 ＝ 配方比例 × 天然來源指數，全部加總就是產品的指數。</p>
@@ -141,7 +171,7 @@ function NaturalIndexBreakdown() {
       <ul className={styles.legend}>
         <li>
           <i style={{ background: "#9FD0E6" }} />
-          <span>配方水</span>
+          <span>配方水（補足至 100%）</span>
           <b>{NATURAL_WATER_PCT}%</b>
           <small>× 1</small>
         </li>
@@ -161,10 +191,10 @@ function NaturalIndexBreakdown() {
 
       <div className={styles.result}>
         <p>
-          含配方水 <strong>{withWater.toFixed(1)}%</strong>
+          含配方水 <strong>{withWater}%</strong>
         </p>
         <p>
-          不含水 <strong>{noWater.toFixed(1)}%</strong>
+          不含水 <strong>{noWater}%</strong>
         </p>
       </div>
       <p className={styles.small}>

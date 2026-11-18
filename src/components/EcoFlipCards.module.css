@@ -251,11 +251,80 @@
   }
 }
 
-.swipeHint {
-  margin-top: 8px;
-  font-size: 0.72rem;
-  color: var(--ink-soft);
-  opacity: 0.8;
+/* ---------- 可以翻面的提示：沒有文字，卡片自己掀一下 ---------- */
+.front {
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.front:focus-visible {
+  outline: 3px solid var(--brand-soft);
+  outline-offset: 3px;
+}
+
+/* 右下角的摺角，像書頁一樣暗示「後面還有」 */
+.corner {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 34px;
+  height: 34px;
+  border-top-left-radius: 10px;
+  background: linear-gradient(135deg, var(--mist) 0 50%, transparent 50%);
+  box-shadow: -3px -3px 8px -4px rgba(20, 50, 48, 0.25);
+  transform-origin: bottom right;
+  transition: width 0.3s, height 0.3s;
+}
+
+.front:hover .corner {
+  width: 46px;
+  height: 46px;
+}
+
+/* 進入畫面後，每張卡依序輕輕翻起再落回，之後每隔幾秒再提示一次，碰過就停 */
+.slot[data-visible="true"] .card[data-hint="true"] .inner {
+  animation: flipHint 7s calc(1s + var(--order, 0) * 0.35s) ease-in-out infinite;
+}
+
+.slot[data-visible="true"] .card[data-hint="true"] .corner {
+  animation: cornerHint 7s calc(1s + var(--order, 0) * 0.35s) ease-in-out infinite;
+}
+
+@keyframes flipHint {
+  0%,
+  24%,
+  100% {
+    transform: rotateY(0deg);
+  }
+  8% {
+    transform: rotateY(-32deg);
+  }
+  14% {
+    transform: rotateY(5deg);
+  }
+  19% {
+    transform: rotateY(-4deg);
+  }
+}
+
+@keyframes cornerHint {
+  0%,
+  24%,
+  100% {
+    width: 34px;
+    height: 34px;
+  }
+  8% {
+    width: 58px;
+    height: 58px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .slot[data-visible="true"] .card[data-hint="true"] .inner,
+  .slot[data-visible="true"] .card[data-hint="true"] .corner {
+    animation: none;
+  }
 }
 
 .barTitle {
