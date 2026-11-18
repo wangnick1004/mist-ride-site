@@ -42,19 +42,19 @@ export const STEPS: AssemblyStep[] = [
     start: 0.08,
     end: 0.2,
     index: "02",
-    title: "鋁塑複合內袋＋化妝水",
-    material: "PET／鋁／PP 三層複合膜",
-    body: "化妝水裝在這個軟袋裡，不直接接觸罐壁，也不接觸壓縮空氣。袋子的鋁層可以擋光，保護怕光的綠茶萃取。",
+    title: "風琴摺內袋＋化妝水",
+    material: "PET／鋁／PP 三層複合膜｜縱向 12 摺",
+    body: "化妝水裝在這個軟袋裡，不接觸罐壁，也不接觸壓縮空氣。袋子沿長度方向摺成風琴狀，被擠壓時會順著摺線往內收，不會亂皺成一個個把化妝水包住的小口袋。",
   },
   {
     key: "housing",
-    parts: ["valve_housing"],
+    parts: ["valve_housing", "dip_tube"],
     start: 0.2,
     end: 0.28,
     index: "03",
-    title: "閥門座",
-    material: "PP",
-    body: "內袋的開口焊在閥門座上，兩者出廠前就連成一體。化妝水從這裡進入閥門。",
+    title: "閥門座＋全長導流管",
+    material: "PP 閥門座｜PP 導流管（溝槽＋側孔）",
+    body: "內袋的開口焊在閥門座上，閥門座下方接一支幾乎和袋子一樣長的導流管。就算袋子扭到或分段壓扁，化妝水也能從管壁的側孔、溝槽和下端開槽流進閥門，噴到最後一點。",
   },
   {
     key: "spring",
@@ -156,6 +156,19 @@ export const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
 export const easeInOut = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
 
 /** 每個零件的名稱、材質與說明（取自組裝步驟），給「玩模型」區點選零件時顯示 */
-export const PART_INFO: Record<string, { title: string; material: string; body: string }> = Object.fromEntries(
-  STEPS.flatMap((s) => s.parts.map((p) => [p, { title: s.title, material: s.material, body: s.body }])),
-);
+export const PART_INFO: Record<string, { title: string; material: string; body: string }> = {
+  ...Object.fromEntries(
+    STEPS.flatMap((s) => s.parts.map((p) => [p, { title: s.title, material: s.material, body: s.body }])),
+  ),
+  // 和閥門座同一步組裝，但點選時單獨說明
+  valve_housing: {
+    title: "閥門座",
+    material: "PP",
+    body: "內袋的開口焊在閥門座上，兩者出廠前就連成一體。化妝水經過導流管，從這裡進入閥門。",
+  },
+  dip_tube: {
+    title: "全長導流管",
+    material: "PP｜4 條外側溝槽、6 個側孔、下端十字開槽",
+    body: "袋子壓扁時，袋壁貼不死溝槽，側孔讓上中下每一段的化妝水都能進管，下端開槽則避免管口被袋底封住。目標是噴出 99% 以上。",
+  },
+};

@@ -22,10 +22,11 @@ const EXPLODE: Record<string, [number, number]> = {
   valve_housing: [0, 0.018],
   bov_bag: [0.045, 0],
   liquid: [0.045, 0],
+  dip_tube: [-0.04, 0.006],
 };
 const SHELL = new Set(["can_body", "print_front", "print_back", "overcap"]);
 const PART_NAMES = new Set([
-  "can_body", "print_front", "print_back", "bov_bag", "liquid", "valve_housing", "valve_spring",
+  "can_body", "print_front", "print_back", "bov_bag", "liquid", "dip_tube", "valve_housing", "valve_spring",
   "valve_stem", "stem_gasket", "cup_gasket", "mounting_cup", "actuator", "nozzle", "overcap",
 ]);
 
@@ -100,6 +101,21 @@ function Model({
     for (const [name, o] of Object.entries(parts)) {
       o.userData.rest = o.position.clone();
       o.userData.name = name;
+    }
+    // 導流管只有 3 mm 粗，手指很難點中：套一個看不見、較粗的點擊範圍，跟著導流管一起移動
+    const tube = parts.dip_tube;
+    if (tube) {
+      scene.updateMatrixWorld(true);
+      const box = new THREE.Box3().setFromObject(tube);
+      const size = box.getSize(new THREE.Vector3());
+      const hit = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.005, 0.005, size.y, 12),
+        new THREE.MeshBasicMaterial({ transparent: true, opacity: 0, depthWrite: false, colorWrite: false }),
+      );
+      hit.position.copy(box.getCenter(new THREE.Vector3()));
+      hit.userData.owner = "dip_tube";
+      (hit.material as THREE.Material).userData = { baseOpacity: 0, baseTransparent: true };
+      tube.attach(hit);
     }
     return { scene, parts, canMats };
   }, [gltf.scene]);

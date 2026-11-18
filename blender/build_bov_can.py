@@ -1,5 +1,8 @@
 """順路 晨霧控油化妝水：50 mL 鋁罐袋式 BOV（壓縮空氣）產品級參數化模型。
 
+A 方案（完全噴出）：縱向風琴摺內袋＋袋內全長導流管（外側溝槽、側孔、下端十字開槽），
+化妝水 50 mL 約占罐容積 55%，讓用到最後仍有足夠空氣壓力。
+
 用法（無介面執行）：
   /Applications/Blender.app/Contents/MacOS/Blender -b -P blender/build_bov_can.py -- \
       --out public/models/bov-can.glb --preview blender/preview
@@ -11,7 +14,7 @@
 取得包材廠規格後修改各零件剖面數值即可。
 
 零件節點名稱（網頁端依名稱做組裝動畫，請勿任意更改）：
-  can_body, print_front, print_back, bov_bag, liquid, valve_housing, valve_spring,
+  can_body, print_front, print_back, bov_bag, liquid, dip_tube, valve_housing, valve_spring,
   valve_stem, stem_gasket, cup_gasket, mounting_cup, actuator, nozzle, overcap
 """
 
@@ -357,6 +360,7 @@ MAT = {
     "overcap": material("保護蓋_透明PET", "#FAFCFB", rough=0.02, transmission=1.0, ior=1.57),
     "bag": material("內袋_PET鋁PP複合膜", "#C9CFD0", metallic=0.85, rough=0.3),
     "liquid": material("化妝水", "#D6EEE7", rough=0.04, transmission=1.0, ior=1.34),
+    "tube": material("導流管_PP", "#7FCFC0", rough=0.35, transmission=0.2),
 }
 
 PARTS = []
@@ -396,69 +400,79 @@ pb = lathe("print_back", [(R + 0.02, 24.0), (R + 0.02, 84.0)], closed=False,
 part(pb, "print_back", "罐身印刷（背面）", "print_back")
 
 
-# ================================================================ 3. BOV 內袋（兩片複合膜熱封的枕形袋）
-BAG_W, BAG_T = 15.0, 13.6     # 裝滿時的半寬、半厚
+# ================================================================ 3. BOV 內袋（縱向風琴摺，A 方案：減少塌陷時形成死角）
+# 參考 EP0869908B1：袋子沿長度方向像手風琴一樣收摺，中段保持暢通，不會被亂皺的袋壁包住液體。
+BAG_R = 14.6                   # 裝滿時的外接半徑（罐內半徑約 17.1，留空氣層）
 BAG_Z0, BAG_Z1 = 6.0, 100.4    # 底封邊上緣、頂部（包住焊接舟）
-FIN = 1.4                      # 側邊熱封邊寬度
-NB = 96
+PLEATS = 12                    # 摺數
+PLEAT_DEPTH = 0.075            # 摺痕往內的深度（相對半徑）
+NB = 192
 
 
-def bag_w(z):
+def bag_loop(z, shrink=0.0):
+    body = smoothstep(BAG_Z0 + 2, 18, z) * (1 - smoothstep(84, 94, z))
     top = smoothstep(84, BAG_Z1, z)
-    return BAG_W * (1 - top) + 3.5 * top
-
-
-def bag_t(z):
     bottom = smoothstep(BAG_Z0, 15, z)
-    top = smoothstep(82, BAG_Z1, z)
-    return BAG_T * bottom * (1 - top) + 1.5 * top * bottom
-
-
-def bag_loop(z, shrink=0.0, wrinkle=True):
-    w = bag_w(z) - shrink
-    t = max(bag_t(z) - shrink, 0.02)
-    body = smoothstep(12, 22, z) * (1 - smoothstep(80, 92, z))
+    r = BAG_R - shrink
+    sx = (1 - top) + (3.5 / BAG_R) * top          # 頂部收成扁口，熱封在焊接舟上
+    sy = ((1 - top) + (1.5 / BAG_R) * top) * bottom  # 底部壓平成熱封邊
     pts = []
     for i in range(NB):
         u = 2 * math.pi * i / NB
-        s = math.sin(u)
-        x = w * math.cos(u)
-        y = t * s * (0.58 + 0.42 * abs(s))
-        if wrinkle:
-            # 裝滿後的軟皺褶：幅度小、方向不規則，避免出現規律的螺旋紋
-            k = body * (0.012 * math.sin(5 * u + 1.3) * math.sin(0.11 * z + 0.4)
-                        + 0.008 * math.sin(9 * u + 2.1) * math.sin(0.23 * z + 1.7)
-                        + 0.005 * math.sin(14 * u + 0.7 + 0.05 * z))
-            y *= 1 + k
-            x *= 1 + 0.25 * k
-        pts.append((x, y))
+        crease = ((1 + math.cos(PLEATS * u)) / 2) ** 6   # 窄而深的內摺線
+        rr = r * (1 - PLEAT_DEPTH * body * crease)
+        pts.append((rr * math.cos(u) * sx, rr * math.sin(u) * max(sy, 0.003)))
     return pts
 
 
-zs = [BAG_Z0 + (BAG_Z1 - BAG_Z0) * (i / 90) ** 1.0 for i in range(91)]
+zs = [BAG_Z0 + (BAG_Z1 - BAG_Z0) * i / 110 for i in range(111)]
 bag_skin = loft("bov_bag", [(bag_loop(z), z) for z in zs])
 
-# 側邊與底部熱封邊（薄片）
-fins = []
-for side in (1, -1):
-    secs = []
-    for z in [BAG_Z0 + (88 - BAG_Z0) * i / 40 for i in range(41)]:
-        w = bag_w(z)
-        x0, x1 = side * (w - 0.3), side * (w + FIN * (1 - smoothstep(80, 88, z)) + 0.05)
-        secs.append(([(x0, -0.16), (x1, -0.16), (x1, 0.16), (x0, 0.16)], z))
-    fins.append(loft(f"fin{side}", secs, True, True, sharp=30))
-bw = BAG_W + FIN
-fins.append(loft("fin_bottom", [
+# 底部熱封邊（薄片）
+bw = BAG_R + 0.8
+fin_bottom = loft("fin_bottom", [
     ([(-bw, -0.16), (bw, -0.16), (bw, 0.16), (-bw, 0.16)], 4.6),
     ([(-bw, -0.16), (bw, -0.16), (bw, 0.16), (-bw, 0.16)], BAG_Z0 + 0.2),
-], True, True, sharp=30))
-bag = join([bag_skin] + fins, "bov_bag")
-part(bag, "bov_bag", "鋁塑複合內袋", "bag")
+], True, True, sharp=30)
+bag = join([bag_skin, fin_bottom], "bov_bag")
+part(bag, "bov_bag", "鋁塑複合內袋（縱向風琴摺）", "bag")
 
-# ================================================================ 4. 化妝水（內袋內，略小於內袋）
+# ================================================================ 4. 化妝水（內袋內，略小於內袋；50 mL，約占罐容積 55%，留足空氣讓最後幾下仍有壓力）
 lz = [BAG_Z0 + 0.8 + (97.0 - BAG_Z0 - 0.8) * i / 80 for i in range(81)]
 liquid = loft("liquid", [(bag_loop(z, shrink=0.35), z) for z in lz], True, True)
 part(liquid, "liquid", "化妝水 50 mL", "liquid")
+
+# ================================================================ 4b. 全長導流管（A 方案：袋子扭轉或分段塌陷時，液體仍能沿管內外流到閥門）
+# 參考 US8196620（袋內與袋等長的導管）、US7730911（導管防止袋子形成口袋）、
+# US3989165 / US5147071（袋壁塌陷時仍保持暢通的流道）。
+TUBE_RO, TUBE_RI = 1.6, 1.0
+TUBE_Z0, TUBE_Z1 = 9.5, 100.2      # 下端離袋底 3.5 mm；上端插進焊接舟底部
+tube = lathe("dip_tube", [
+    (TUBE_RI, TUBE_Z0), (TUBE_RO, TUBE_Z0), (TUBE_RO, TUBE_Z1), (TUBE_RI, TUBE_Z1),
+], closed=True, seg=64, sharp=60)
+
+
+def box(name, x0, x1, y0, y1, z0, z1, ang=0.0):
+    c, s_ = math.cos(ang), math.sin(ang)
+    rect = [(x * c - y * s_, x * s_ + y * c) for (x, y) in ((x0, y0), (x1, y0), (x1, y1), (x0, y1))]
+    return loft(name, [(rect, z0), (rect, z1)], True, True, sharp=30)
+
+
+cutters = []
+# 管壁外側 4 條縱向溝槽：袋壁貼上來時，溝槽仍是液體的通道
+for k in range(4):
+    cutters.append(box(f"groove{k}", TUBE_RO - 0.38, TUBE_RO + 0.6, -0.3, 0.3, 12.0, 97.5,
+                       ang=math.pi / 2 * k))
+# 管壁側孔：與溝槽錯開 45°，上下交錯，讓各段袋子裡的液體都能進管
+for i, z in enumerate((18, 32, 46, 60, 74, 88)):
+    h = lathe(f"hole{i}", [(0.0, -2.4), (0.42, -2.4), (0.42, 2.4), (0.0, 2.4)], closed=True, seg=20)
+    apply_xform(h, rot=(0, math.pi / 2, math.pi / 4 + (math.pi / 2) * (i % 2)), loc=(0, 0, z * MM))
+    cutters.append(h)
+# 下端十字開槽：管口貼到袋底也不會被封住
+cutters.append(box("slot_a", -2.2, 2.2, -0.35, 0.35, TUBE_Z0 - 0.5, TUBE_Z0 + 2.2))
+cutters.append(box("slot_b", -2.2, 2.2, -0.35, 0.35, TUBE_Z0 - 0.5, TUBE_Z0 + 2.2, ang=math.pi / 2))
+tube = boolean_cut(tube, join(cutters, "tube_cutters"))
+part(tube, "dip_tube", "全長導流管（溝槽＋側孔）", "tube")
 
 # ================================================================ 5. 閥門座（含底部焊接舟，內袋熱封在舟上）
 housing_body = lathe("valve_housing", fillet([
@@ -667,7 +681,7 @@ if PREVIEW or REFS:
     if "assembled" in only:
         shoot("assembled.png", (0, 0, 0.068), 0.44, (0.35, 1.0, -0.18))
     # 爆炸圖：零件沿 Z 軸分開，內袋側移、噴嘴往前拉出
-    lift = {"can_body": 0, "print_front": 0, "print_back": 0, "bov_bag": 0, "liquid": 0,
+    lift = {"can_body": 0, "print_front": 0, "print_back": 0, "bov_bag": 0, "liquid": 0, "dip_tube": 16,
             "valve_housing": 16, "valve_spring": 28, "valve_stem": 38, "stem_gasket": 50,
             "cup_gasket": 56, "mounting_cup": 62, "actuator": 80, "nozzle": 80, "overcap": 118}
     for o in PARTS:
@@ -680,5 +694,5 @@ if PREVIEW or REFS:
         shoot("exploded.png", (0.012, 0, 0.12), 0.8, (0.3, 1.0, -0.12))
     if "valve" in only:
         for o in PARTS:
-            o.hide_render = o.name in ("can_body", "print_front", "print_back", "bov_bag", "liquid", "overcap")
+            o.hide_render = o.name in ("can_body", "print_front", "print_back", "bov_bag", "liquid", "overcap", "dip_tube")
         shoot("valve_detail.png", (0, 0, 0.16), 0.2, (0.45, 1.0, -0.35))
