@@ -1,14 +1,15 @@
 "use client";
 
-import { useId, useState, type ReactNode } from "react";
-import { ECO_FACTS, type EcoFact } from "@/lib/ingredients";
+import { useId, useRef, useState, type PointerEvent as RPointerEvent, type ReactNode } from "react";
+import { ECO_FACTS, NATURAL_ROWS, NATURAL_WATER_PCT, type EcoFact } from "@/lib/ingredients";
 import CountUp from "./CountUp";
 import Reveal from "./Reveal";
 import styles from "./EcoFlipCards.module.css";
 
 const STATUS_TEXT = { estimate: "暫估值", pending: "驗證中", design: "設計規格" } as const;
+const SWIPE = 60; // 左右滑超過這個距離（px）就翻面
 
-/** 永續卡片：正面是重點數字，翻面看計算方式或更深入的說明。 */
+/** 永續卡片：正面是重點數字，翻面看計算方式或更深入的說明。可按按鈕，也可用手指左右滑動翻面。 */
 export default function EcoFlipCards() {
   return (
     <ul className={styles.grid}>
@@ -22,11 +23,51 @@ export default function EcoFlipCards() {
 }
 
 function FlipCard({ fact, back }: { fact: EcoFact; back: { title: string; body: ReactNode } }) {
-  const [flipped, setFlipped] = useState(false);
+  // 用角度記錄翻面狀態：往左滑 −180°、往右滑 +180°，翻轉方向跟著手勢
+  const [angle, setAngle] = useState(0);
+  const [drag, setDrag] = useState(0);
+  const start = useRef<{ x: number; y: number; id: number; horizontal: boolean | null } | null>(null);
   const id = useId();
+  const flipped = Math.abs(Math.round(angle / 180)) % 2 === 1;
+
+  const onDown = (e: RPointerEvent<HTMLDivElement>) => {
+    if ((e.target as Element).closest("input, select, textarea")) return;
+    start.current = { x: e.clientX, y: e.clientY, id: e.pointerId, horizontal: null };
+  };
+  const onMove = (e: RPointerEvent<HTMLDivElement>) => {
+    const s = start.current;
+    if (!s || s.id !== e.pointerId) return;
+    const dx = e.clientX - s.x;
+    const dy = e.clientY - s.y;
+    if (s.horizontal === null && Math.hypot(dx, dy) > 8) {
+      s.horizontal = Math.abs(dx) > Math.abs(dy);
+      if (s.horizontal) e.currentTarget.setPointerCapture(e.pointerId);
+    }
+    if (s.horizontal) setDrag(Math.max(-180, Math.min(180, dx * 0.6)));
+  };
+  const onUp = (e: RPointerEvent<HTMLDivElement>) => {
+    const s = start.current;
+    start.current = null;
+    if (!s || s.id !== e.pointerId || !s.horizontal) {
+      setDrag(0);
+      return;
+    }
+    const dx = e.clientX - s.x;
+    if (Math.abs(dx) > SWIPE) setAngle((a) => a + (dx > 0 ? 180 : -180));
+    setDrag(0);
+  };
+
   return (
-    <div className={styles.card} data-flipped={flipped}>
-      <div className={styles.inner}>
+    <div
+      className={styles.card}
+      data-flipped={flipped}
+      data-dragging={drag !== 0}
+      onPointerDown={onDown}
+      onPointerMove={onMove}
+      onPointerUp={onUp}
+      onPointerCancel={onUp}
+    >
+      <div className={styles.inner} style={{ transform: `rotateY(${angle + drag}deg)` }}>
         <section className={styles.front} aria-hidden={flipped} inert={flipped}>
           <p className={styles.status} data-status={fact.status}>
             {STATUS_TEXT[fact.status]}
@@ -37,15 +78,18 @@ function FlipCard({ fact, back }: { fact: EcoFact; back: { title: string; body: 
           </p>
           <h3>{fact.label}</h3>
           <p className={styles.note}>{fact.note}</p>
-          <button type="button" className={styles.flip} aria-controls={id} aria-expanded={flipped} onClick={() => setFlipped(true)}>
+          <button type="button" className={styles.flip} aria-controls={id} aria-expanded={flipped} onClick={() => setAngle((a) => a - 180)}>
             翻面看{back.title} <span aria-hidden="true">↻</span>
           </button>
+          <p className={styles.swipeHint} aria-hidden="true">
+            ← 也可以左右滑動翻面 →
+          </p>
         </section>
 
         <section id={id} className={styles.back} aria-hidden={!flipped} inert={!flipped} aria-label={back.title}>
           <h3>{back.title}</h3>
           <div className={styles.backBody}>{back.body}</div>
-          <button type="button" className={styles.flip} onClick={() => setFlipped(false)}>
+          <button type="button" className={styles.flip} onClick={() => setAngle((a) => a + 180)}>
             翻回正面 <span aria-hidden="true">↺</span>
           </button>
         </section>
@@ -54,55 +98,84 @@ function FlipCard({ fact, back }: { fact: EcoFact; back: { title: string; body: 
   );
 }
 
-/** ISO 16128-2：含水指數 = 水比例 + (1 − 水比例) × 不含水指數 */
-function NaturalIndexCalc() {
-  const [water, setWater] = useState(83);
-  const dry = 87.5; // 不含水的天然來源指數（暫估，依原料商文件重算）
-  const wet = water + ((100 - water) * dry) / 100;
-  const id = useId();
+/** ISO 16128-2 成分明細：配方水固定 83.15%，其餘成分以顏色區分 */
+function NaturalIndexBreakdown() {
+  const rest = NATURAL_ROWS.reduce((a, r) => a + r.pct, 0);
+  const contrib = NATURAL_ROWS.reduce((a, r) => a + r.pct * r.index, 0);
+  const withWater = NATURAL_WATER_PCT + contrib;
+  const noWater = (contrib / rest) * 100;
   return (
     <div className={styles.calc}>
-      <p>
-        水本身算 100% 天然來源，所以配方含水越多，「含水指數」就越高。這就是為什麼兩個數字要一起標示。
-      </p>
-      <label htmlFor={id} className={styles.sliderLabel}>
-        配方水含量 <strong>{water}%</strong>
-      </label>
-      <input
-        id={id}
-        type="range"
-        min={50}
-        max={95}
-        value={water}
-        onChange={(e) => setWater(Number(e.target.value))}
-        className={styles.slider}
-      />
-      <div className={styles.bars}>
-        <Bar label="含水指數" value={wet} />
-        <Bar label="不含水指數" value={dry} muted />
-      </div>
-      <p className={styles.formula}>
-        {water}% + {100 - water}% × {dry}% = <strong>{wet.toFixed(1)}%</strong>
-      </p>
-      <p className={styles.small}>本產品配方水約 83%，以原料商提供的 ISO 16128 文件重算後定案。</p>
-    </div>
-  );
-}
+      <p>每個成分的貢獻 ＝ 配方比例 × 天然來源指數，全部加總就是產品的指數。</p>
 
-function Bar({ label, value, muted }: { label: string; value: number; muted?: boolean }) {
-  return (
-    <div className={styles.bar}>
-      <span>{label}</span>
-      <span className={styles.track}>
-        <span className={styles.fill} data-muted={muted} style={{ width: `${value}%` }} />
-      </span>
-      <span className={styles.barValue}>{value.toFixed(1)}%</span>
+      <p className={styles.barTitle}>全配方 100%</p>
+      <div className={styles.stack} role="img" aria-label={`配方水 ${NATURAL_WATER_PCT}%，其他成分 ${rest.toFixed(2)}%`}>
+        <span style={{ width: `${NATURAL_WATER_PCT}%`, background: "#9FD0E6" }}>
+          <em>水 {NATURAL_WATER_PCT}%</em>
+        </span>
+        {NATURAL_ROWS.map((r) => (
+          <span key={r.name} style={{ width: `${r.pct}%`, background: r.color }} />
+        ))}
+      </div>
+
+      <p className={styles.barTitle}>放大：水以外的 {rest.toFixed(2)}%</p>
+      <div className={styles.stack} role="img" aria-label="水以外的成分比例，灰色斜線代表非天然來源的部分">
+        {NATURAL_ROWS.map((r) => {
+          const natural = r.index * 100;
+          return (
+            <span
+              key={r.name}
+              title={`${r.name} ${r.pct}%`}
+              style={{
+                width: `${(r.pct / rest) * 100}%`,
+                background:
+                  r.index >= 1
+                    ? r.color
+                    : `linear-gradient(90deg, ${r.color} ${natural}%, transparent ${natural}%), repeating-linear-gradient(45deg, #c9cfd0 0 3px, #eef0f0 3px 6px)`,
+              }}
+            />
+          );
+        })}
+      </div>
+
+      <ul className={styles.legend}>
+        <li>
+          <i style={{ background: "#9FD0E6" }} />
+          <span>配方水</span>
+          <b>{NATURAL_WATER_PCT}%</b>
+          <small>× 1</small>
+        </li>
+        {NATURAL_ROWS.map((r) => (
+          <li key={r.name} title={r.note}>
+            <i
+              style={{
+                background: r.index >= 1 ? r.color : `repeating-linear-gradient(45deg, ${r.color} 0 3px, #eef0f0 3px 6px)`,
+              }}
+            />
+            <span>{r.name}</span>
+            <b>{r.pct}%</b>
+            <small>× {r.index}</small>
+          </li>
+        ))}
+      </ul>
+
+      <div className={styles.result}>
+        <p>
+          含配方水 <strong>{withWater.toFixed(1)}%</strong>
+        </p>
+        <p>
+          不含水 <strong>{noWater.toFixed(1)}%</strong>
+        </p>
+      </div>
+      <p className={styles.small}>
+        斜線＝非天然來源的部分（例如菸鹼醯胺保守假設為石化路線）。數字為企劃書表 2-7 的基準情境暫估，定案前以原料商文件重算。
+      </p>
     </div>
   );
 }
 
 const BACKS: { title: string; body: ReactNode }[] = [
-  { title: "怎麼算", body: <NaturalIndexCalc /> },
+  { title: "成分明細", body: <NaturalIndexBreakdown /> },
   {
     title: "和傳統噴霧比較",
     body: (

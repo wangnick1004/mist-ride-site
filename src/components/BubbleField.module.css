@@ -1,0 +1,68 @@
+/* 金色優惠泡泡：放在成分頁所有內容的上方，任何位置都點得到 */
+.couponLayer {
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.coupon {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  pointer-events: auto;
+  cursor: grab;
+  touch-action: none; /* 手機上也能直接拖曳、甩出 */
+  background: radial-gradient(circle at 34% 30%, #fffdf6 0%, #fbe6b3 38%, #e8b45a 78%, rgba(224, 172, 80, 0.15) 100%);
+  box-shadow:
+    inset 0 0 0 1.5px rgba(176, 120, 30, 0.55),
+    inset -6px -8px 14px rgba(176, 120, 30, 0.25),
+    0 8px 18px -8px rgba(150, 100, 20, 0.55);
+  will-change: transform;
+}
+
+.coupon::after {
+  /* 泡泡表面的高光 */
+  content: "";
+  position: absolute;
+  top: 16%;
+  left: 20%;
+  width: 26%;
+  height: 15%;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  transform: rotate(-35deg);
+}
+
+.coupon[data-held="true"] {
+  cursor: grabbing;
+}
+
+.coupon:focus-visible {
+  outline: 3px solid #e23b3b;
+  outline-offset: 3px;
+}
+
+.ticket {
+  width: 54%;
+  height: auto;
+  transform: rotate(-12deg);
+  filter: drop-shadow(0 1px 1px rgba(120, 20, 20, 0.35));
+  animation: wiggle 2.4s ease-in-out infinite;
+}
+
+@keyframes wiggle {
+  50% {
+    transform: rotate(8deg) scale(1.05);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ticket {
+    animation: none;
+  }
+}

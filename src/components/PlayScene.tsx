@@ -153,8 +153,10 @@ function Model({
         m.opacity = ghost ? 0.16 : (m.userData.baseOpacity as number);
         m.depthWrite = !ghost;
         if ("emissive" in m) {
-          m.emissive.set(selected ? "#2aa18f" : "#000000");
-          m.emissiveIntensity = selected ? 0.35 : 0;
+          // 被點選的零件以品牌綠色脈動發光，清楚標示點到了哪一個
+          const pulse = 0.55 + 0.25 * Math.sin(now / 180);
+          m.emissive.set(selected ? "#2fbfa8" : "#000000");
+          m.emissiveIntensity = selected ? pulse : 0;
         }
       }
     });

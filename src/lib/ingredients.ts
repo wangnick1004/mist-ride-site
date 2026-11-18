@@ -192,3 +192,31 @@ export const FORMULA_FACTS = [
   "不含防曬成分，誠實提醒你另外擦防曬",
   "全成分數量以 13 種以內為目標",
 ];
+
+/**
+ * ISO 16128-2 天然來源指數的成分明細（基準情境、暫估）。
+ * 資料來源：《化妝品產品行銷企劃書_v3》表 2-7（每 100 g 配方）。
+ * 配方百分比仍待打樣，各原料指數多為假設，定案前須以原料商文件重算。
+ */
+export interface NaturalRow {
+  name: string;
+  pct: number; // 配方中的質量百分比
+  index: number; // 原料的天然來源指數（0～1）
+  color: string;
+  note?: string;
+}
+
+export const NATURAL_WATER_PCT = 83.15;
+
+export const NATURAL_ROWS: NaturalRow[] = [
+  { name: "生物基 1,3-丙二醇", pct: 5.0, index: 1, color: "#E3B94F", note: "玉米糖生物路線" },
+  { name: "白柳樹皮萃取（液態）", pct: 5.0, index: 0.99, color: "#B98A55", note: "商品含少量苯氧乙醇" },
+  { name: "依克多因", pct: 2.0, index: 1, color: "#1F7A6D", note: "微生物發酵" },
+  { name: "菸鹼醯胺", pct: 2.0, index: 0, color: "#9AA3A4", note: "保守假設為石化路線" },
+  { name: "戊二醇（生物基等級）", pct: 2.0, index: 1, color: "#7FBFB3", note: "甘蔗蔗渣來源" },
+  { name: "綠茶萃取", pct: 0.3, index: 1, color: "#5E9B5F", note: "植物萃取" },
+  { name: "辛醯羥肟酸", pct: 0.25, index: 0.8, color: "#D27C5C", note: "分子量法估算" },
+  { name: "植酸鈉", pct: 0.1, index: 1, color: "#9B82C4", note: "稻米糠來源" },
+  { name: "檸檬酸", pct: 0.1, index: 1, color: "#F0A24E", note: "葡萄糖發酵" },
+  { name: "檸檬酸鈉", pct: 0.1, index: 1, color: "#E77F7A", note: "檸檬酸中和" },
+];

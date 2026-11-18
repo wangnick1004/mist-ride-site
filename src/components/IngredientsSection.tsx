@@ -17,7 +17,7 @@ export default function IngredientsSection() {
           <p className={styles.kicker}>霧裡有什麼</p>
           <h2 id="ingredients-title">三個主角成分，一份說得清楚的成分表</h2>
           <p className={styles.lead}>
-            每個成分都對應騎車通勤的一個困擾，也都標出證據來自哪一種研究。點圖卡看作用原理與證據。背景的氣泡可以拖著走、甩出去或戳破，金色的「優惠」泡泡裡藏著優惠券。
+            每個成分都對應騎車通勤的一個困擾，也都標出證據來自哪一種研究。點圖卡看作用原理與證據。背景的氣泡可以拖著走、甩出去或戳破，金色泡泡裡藏著紅色優惠券，戳破就能領取。
           </p>
         </Reveal>
       </header>

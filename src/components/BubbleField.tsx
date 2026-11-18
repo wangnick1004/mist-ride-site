@@ -1,13 +1,15 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import styles from "./BubbleField.module.css";
 
 /**
  * 成分頁背景的晨霧氣泡。
  * - 會上升、左右搖擺；游標靠近時被推開
  * - 按住可以拖曳，放開時依手勢速度甩出去；甩得夠快撞到邊緣就會破
  * - 點一下會破，大氣泡破了會分裂成小氣泡
- * - 少數「優惠泡泡」戳破後會呼叫 onCoupon（顯示官方 LINE 優惠券）
+ * - 金色「優惠泡泡」放在最上層（一般 DOM 元素），任何位置都點得到，也能用鍵盤戳破；
+ *   戳破後呼叫 onCoupon（顯示官方 LINE 優惠券）
  * 不在畫面內時暫停；「減少動態效果」時只畫靜態氣泡，仍可點擊戳破。
  */
 
@@ -25,6 +27,7 @@ interface Bubble {
   kind: Kind;
   held: boolean;
   thrown: boolean;
+  slot: number; // 優惠泡泡對應的 DOM 元素編號，一般泡泡為 -1
 }
 
 interface Pop {
@@ -46,6 +49,7 @@ export default function BubbleField({
   onCoupon?: () => void;
 }) {
   const ref = useRef<HTMLCanvasElement>(null);
+  const couponEls = useRef<(HTMLDivElement | null)[]>([]);
   const couponCb = useRef(onCoupon);
   useEffect(() => {
     couponCb.current = onCoupon;
@@ -80,9 +84,19 @@ export default function BubbleField({
         kind,
         held: false,
         thrown: false,
+        slot: -1,
       };
     };
     const coupons = () => bubbles.filter((b) => b.kind === "coupon").length;
+    const freeSlot = () => {
+      for (let i = 0; i < MAX_COUPONS; i++) if (!bubbles.some((b) => b.slot === i)) return i;
+      return -1;
+    };
+    const makeCoupon = (y?: number) => {
+      const b = make("coupon", y);
+      b.slot = freeSlot();
+      return b;
+    };
 
     const resize = () => {
       const dpr = Math.min(2, window.devicePixelRatio || 1);
@@ -94,14 +108,15 @@ export default function BubbleField({
       const target = Math.round(Math.min(70, (W * H) / 26000));
       while (bubbles.length < target) bubbles.push(make());
       bubbles = bubbles.slice(0, target + MAX_COUPONS);
-      while (coupons() < MAX_COUPONS) bubbles.push(make("coupon"));
+      while (coupons() < MAX_COUPONS) bubbles.push(makeCoupon());
     };
     resize();
     const ro = new ResizeObserver(resize);
     ro.observe(host);
 
     const draw = (b: Bubble) => {
-      const coupon = b.kind === "coupon";
+      if (b.kind === "coupon") return; // 優惠泡泡由最上層的 DOM 元素呈現
+      const coupon = false;
       const g = ctx.createRadialGradient(b.x - b.r * 0.35, b.y - b.r * 0.4, b.r * 0.05, b.x, b.y, b.r);
       if (coupon) {
         g.addColorStop(0, "rgba(255,255,255,0.98)");
@@ -125,12 +140,23 @@ export default function BubbleField({
       ctx.beginPath();
       ctx.ellipse(b.x - b.r * 0.38, b.y - b.r * 0.42, b.r * 0.2, b.r * 0.12, -0.6, 0, Math.PI * 2);
       ctx.fill();
-      if (coupon) {
-        ctx.fillStyle = "#8a5a12";
-        ctx.font = `700 ${Math.round(b.r * 0.42)}px "PingFang TC","Noto Sans TC",sans-serif`;
-        ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
-        ctx.fillText("優惠", b.x, b.y + 1);
+    };
+
+    // 把優惠泡泡的位置同步到最上層的 DOM 元素
+    const syncCoupons = () => {
+      const els = couponEls.current;
+      for (let i = 0; i < MAX_COUPONS; i++) {
+        const el = els[i];
+        if (!el) continue;
+        const b = bubbles.find((x) => x.slot === i);
+        if (!b) {
+          el.style.display = "none";
+          continue;
+        }
+        el.style.display = "";
+        el.style.width = el.style.height = `${b.r * 2}px`;
+        el.style.transform = `translate(${b.x - b.r}px, ${b.y - b.r}px) scale(${b.held ? 1.1 : 1})`;
+        el.dataset.held = String(b.held);
       }
     };
 
@@ -140,14 +166,11 @@ export default function BubbleField({
     };
     const hitTest = (p: { x: number; y: number }) => {
       // 優惠泡泡優先、後畫的在上面
-      let best: Bubble | null = null;
       for (let i = bubbles.length - 1; i >= 0; i--) {
         const b = bubbles[i];
-        if (Math.hypot(p.x - b.x, p.y - b.y) <= b.r + 6) {
-          if (!best || (b.kind === "coupon" && best.kind !== "coupon")) best = b;
-        }
+        if (b.kind !== "coupon" && Math.hypot(p.x - b.x, p.y - b.y) <= b.r + 6) return b;
       }
-      return best;
+      return null;
     };
 
     const pop = (b: Bubble) => {
@@ -183,9 +206,16 @@ export default function BubbleField({
     } | null = null;
 
     const onDown = (e: PointerEvent) => {
-      if ((e.target as Element | null)?.closest("[data-reveal], a, button, dialog, input, label")) return;
+      const target = e.target as Element | null;
+      const couponEl = target?.closest<HTMLElement>("[data-coupon]");
+      let b: Bubble | null = null;
+      if (couponEl) {
+        b = bubbles.find((x) => x.slot === Number(couponEl.dataset.coupon)) ?? null;
+      } else {
+        if (target?.closest("[data-reveal], a, button, dialog, input, label")) return;
+        b = hitTest(local(e));
+      }
       const p = local(e);
-      const b = hitTest(p);
       if (!b) return;
       e.preventDefault();
       b.held = true;
@@ -221,7 +251,7 @@ export default function BubbleField({
         if (reduce) render();
         return;
       }
-      host.style.cursor = hitTest(p) ? "grab" : "";
+      if (!(e.target as Element | null)?.closest("[data-coupon]")) host.style.cursor = hitTest(p) ? "grab" : "";
     };
 
     const release = (e: PointerEvent, cancelled = false) => {
@@ -262,6 +292,19 @@ export default function BubbleField({
     host.addEventListener("pointercancel", onCancel);
     host.addEventListener("pointerleave", onLeave);
 
+    // 鍵盤：在優惠泡泡上按 Enter／空白鍵戳破
+    const onKey = (e: KeyboardEvent) => {
+      const el = (e.target as Element | null)?.closest<HTMLElement>("[data-coupon]");
+      if (!el || (e.key !== "Enter" && e.key !== " ")) return;
+      e.preventDefault();
+      const b = bubbles.find((x) => x.slot === Number(el.dataset.coupon));
+      if (b) {
+        pop(b);
+        render();
+      }
+    };
+    host.addEventListener("keydown", onKey);
+
     // 捲動時給氣泡一點慣性
     let lastScroll = window.scrollY;
     const onScroll = () => {
@@ -275,7 +318,7 @@ export default function BubbleField({
     const step = (dt: number) => {
       if (couponCooldown > 0) {
         couponCooldown -= dt;
-        if (couponCooldown <= 0 && coupons() < MAX_COUPONS) bubbles.push(make("coupon", H + 50));
+        if (couponCooldown <= 0 && coupons() < MAX_COUPONS) bubbles.push(makeCoupon(H + 50));
       }
       for (let i = bubbles.length - 1; i >= 0; i--) {
         const b = bubbles[i];
@@ -319,7 +362,10 @@ export default function BubbleField({
             }
           }
         } else {
-          if (b.y < -b.r - 20) Object.assign(b, make(b.kind, H + b.r + Math.random() * 60));
+          if (b.y < -b.r - 20) {
+            const slot = b.slot;
+            Object.assign(b, make(b.kind, H + b.r + Math.random() * 60), { slot });
+          }
           if (b.x < -b.r) b.x = W + b.r;
           if (b.x > W + b.r) b.x = -b.r;
         }
@@ -331,6 +377,7 @@ export default function BubbleField({
     };
 
     const render = () => {
+      syncCoupons();
       ctx.clearRect(0, 0, W, H);
       for (const b of bubbles) draw(b);
       for (const p of pops) {
@@ -374,7 +421,8 @@ export default function BubbleField({
       }
     });
     io.observe(host);
-    if (reduce) render();
+    // 先畫一次靜態畫面：動畫還沒開始（或分頁在背景）時，金色泡泡也已經在畫面上、點得到
+    render();
 
     return () => {
       cancelAnimationFrame(raf);
@@ -385,9 +433,43 @@ export default function BubbleField({
       host.removeEventListener("pointerup", onUp);
       host.removeEventListener("pointercancel", onCancel);
       host.removeEventListener("pointerleave", onLeave);
+      host.removeEventListener("keydown", onKey);
       window.removeEventListener("scroll", onScroll);
     };
   }, []);
 
-  return <canvas ref={ref} className={className} aria-hidden="true" />;
+  return (
+    <>
+      <canvas ref={ref} className={className} aria-hidden="true" />
+      <div className={styles.couponLayer}>
+        {Array.from({ length: MAX_COUPONS }, (_, i) => (
+          <div
+            key={i}
+            ref={(el) => {
+              couponEls.current[i] = el;
+            }}
+            className={styles.coupon}
+            data-coupon={i}
+            role="button"
+            tabIndex={0}
+            aria-label="金色優惠泡泡：點一下戳破，領取上市優惠券"
+            style={{ display: "none" }}
+          >
+            <svg viewBox="0 0 44 28" aria-hidden="true" className={styles.ticket}>
+              {/* 兩側有半圓缺口的紅色優惠券 */}
+              <path
+                d="M4 2h36a2 2 0 0 1 2 2v6.5a3.5 3.5 0 0 0 0 7V24a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-6.5a3.5 3.5 0 0 0 0-7V4a2 2 0 0 1 2-2z"
+                fill="#E23B3B"
+              />
+              <path d="M30 5v18" stroke="#fff" strokeWidth="1.4" strokeDasharray="2.2 2" />
+              <circle cx="11" cy="10" r="2.6" fill="none" stroke="#fff" strokeWidth="1.6" />
+              <circle cx="20" cy="18" r="2.6" fill="none" stroke="#fff" strokeWidth="1.6" />
+              <path d="M21.5 8.5 9.5 19.5" stroke="#fff" strokeWidth="1.6" strokeLinecap="round" />
+              <path d="M34.5 10.5v7" stroke="#fff" strokeWidth="1.6" strokeLinecap="round" />
+            </svg>
+          </div>
+        ))}
+      </div>
+    </>
+  );
 }

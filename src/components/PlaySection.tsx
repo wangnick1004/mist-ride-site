@@ -63,9 +63,22 @@ export default function PlaySection() {
       <div className={styles.layout}>
         <div className={styles.stage}>
           {near && <PlayScene state={state} onPick={setSelected} onSpray={spray} />}
-          <p className={styles.hint} aria-hidden="true">
-            拖曳旋轉・點零件看說明
-          </p>
+          {/* 點到零件時直接在模型上方浮出說明，窄螢幕也看得到 */}
+          {info ? (
+            <div className={styles.popover} role="status">
+              <button type="button" className={styles.popClose} onClick={() => setSelected(null)} aria-label="關閉零件說明">
+                ×
+              </button>
+              <p className={styles.infoKicker}>你點的是</p>
+              <h3>{info.title}</h3>
+              <p className={styles.material}>{info.material}</p>
+              <p className={styles.popBody}>{info.body}</p>
+            </div>
+          ) : (
+            <p className={styles.hint} aria-hidden="true">
+              拖曳旋轉・點零件看說明
+            </p>
+          )}
         </div>
 
         <div className={styles.panel}>
