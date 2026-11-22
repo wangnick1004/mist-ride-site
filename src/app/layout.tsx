@@ -8,7 +8,8 @@ import "./globals.css";
 const noto = Noto_Sans_TC({ weight: ["400", "500", "700", "900"], preload: false, display: "swap", variable: "--font-noto" });
 const archivo = Archivo({ subsets: ["latin"], axes: ["wdth"], display: "swap", variable: "--font-archivo" });
 
-const GSC = (process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION ?? "").trim();
+// Google Search Console 驗證碼（公開資訊，本來就會出現在網頁原始碼）；環境變數可覆寫
+const GSC = (process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION ?? "").trim() || "AfT_aROvFy-4do2SVn5Z9YIVu_zMk4qfEj-DN8QuXUw";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),
@@ -33,7 +34,6 @@ export const metadata: Metadata = {
   },
   robots: { index: true, follow: true, googleBot: { index: true, follow: true, "max-image-preview": "large" } },
   formatDetection: { telephone: false, email: false, address: false },
-  // Google Search Console 驗證碼：在 Vercel 設定 NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION 後重新部署
   ...(GSC ? { verification: { google: GSC } } : {}),
 };
 
