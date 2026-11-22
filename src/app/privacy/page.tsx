@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   description: "機不可失化妝水（MIST-RIDE）試用登記與官方 LINE 客服的個人資料蒐集、處理及利用告知（個人資料保護法第 8 條）。",
 };
 
-// 【】內為上線前需由團隊填寫的資訊
+const CONTACT_EMAIL = "411313020@gms.ndhu.edu.tw";
 export default function PrivacyPage() {
   return (
     <main className={styles.page}>
@@ -20,7 +20,7 @@ export default function PrivacyPage() {
 
       <section>
         <h2>一、蒐集者</h2>
-        <p>機不可失（MIST-RIDE）團隊【團隊或公司正式名稱】（以下稱「我們」）。聯絡方式：【聯絡 Email】。</p>
+        <p>機不可失（MIST-RIDE）團隊（以下稱「我們」）。聯絡方式：<a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>。</p>
       </section>
 
       <section>
@@ -45,7 +45,7 @@ export default function PrivacyPage() {
         <h2>四、利用期間、地區、對象及方式</h2>
         <ul>
           <li>期間：自登記日起 1 年，或你要求刪除時為止；期滿後由系統自動刪除。</li>
-          <li>地區：中華民國境內，以及我們使用之雲端主機與資料庫服務所在地區【服務商與地區】。</li>
+          <li>地區：中華民國境內，以及我們使用之雲端服務（Vercel 網站主機、Neon 資料庫、Cloudflare）所在地區，可能位於中華民國境外。</li>
           <li>對象：僅限我們內部經授權的成員；寄送試用品時，提供必要資訊給物流業者。不會出售或提供給其他第三方。</li>
           <li>方式：以電子方式儲存與處理，並採取加密傳輸、存取控管與操作紀錄等安全措施。</li>
         </ul>
@@ -54,7 +54,7 @@ export default function PrivacyPage() {
       <section>
         <h2>五、你的權利</h2>
         <p>
-          依個人資料保護法第 3 條，你可以向我們請求查詢、閱覽、製給複本、補充或更正、停止蒐集處理利用，或刪除你的個人資料。請寄信到【聯絡 Email】，
+          依個人資料保護法第 3 條，你可以向我們請求查詢、閱覽、製給複本、補充或更正、停止蒐集處理利用，或刪除你的個人資料。請寄信到<a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>，
           我們會在確認身分後處理。
         </p>
       </section>
@@ -88,7 +88,7 @@ export default function PrivacyPage() {
             <strong>截圖會以原圖傳送</strong>，請避免截到你不想提供的個人資料或他人留言。Google 可能依其服務條款處理這些內容，並可能涉及境外傳輸。
           </li>
           <li>
-            <b>保存期間：</b>對話紀錄（已遮罩）保存 30 天後自動刪除；分享截圖保存 30 天供人工審核後自動刪除；審核紀錄（不含截圖）與折扣碼保存至優惠使用期限屆滿後【保存期間】。
+            <b>保存期間：</b>對話紀錄（已遮罩）保存 30 天後自動刪除；分享截圖保存 30 天供人工審核後自動刪除；審核紀錄（不含截圖）與折扣碼保存至優惠使用期限屆滿後 7 天。
             你封鎖或刪除好友時，對話紀錄會立即刪除。
           </li>
           <li>
@@ -98,7 +98,7 @@ export default function PrivacyPage() {
             <b>優惠券規則：</b>領券只檢查是否公開分享與是否標示活動標籤，<strong>不以正面評價為條件</strong>，貼文內容想怎麼寫都可以。
           </li>
           <li>
-            <b>你的權利：</b>與第五點相同，可以請求查詢、更正、停止處理或刪除，請寄信到【聯絡 Email】，或在 LINE 輸入「真人客服」。
+            <b>你的權利：</b>與第五點相同，可以請求查詢、更正、停止處理或刪除，請寄信到<a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>，或在 LINE 輸入「真人客服」。
           </li>
         </ul>
       </section>
