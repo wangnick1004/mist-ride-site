@@ -7,7 +7,7 @@ const noto = Noto_Sans_TC({ weight: ["400", "500", "700", "900"], preload: false
 const archivo = Archivo({ subsets: ["latin"], axes: ["wdth"], display: "swap", variable: "--font-archivo" });
 
 export const metadata: Metadata = {
-  title: "機不可失 MIST-RIDE｜晨霧控油化妝水",
+  title: "機不可失 MIST-RIDE｜機不可失化妝水",
   description: "帽險路上，機不可失。給每天騎車通勤的你：戴安全帽前噴 3 下，控油、保濕。鋁罐袋式噴霧，輕壓就是一陣細霧。",
 };
 
