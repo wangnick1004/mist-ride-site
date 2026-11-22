@@ -89,3 +89,50 @@
   color: var(--ink-soft);
   border-top: 1px solid var(--line);
 }
+
+.footerLine {
+  color: var(--brand);
+  font-weight: 700;
+}
+
+/* 手機：導覽列不換行，可左右滑動；頁尾留出右下角小幫手按鈕的空間 */
+@media (max-width: 640px) {
+  .nav {
+    gap: 12px;
+  }
+
+  .brand {
+    flex: none;
+  }
+
+  .brandText {
+    white-space: nowrap;
+    font-size: 1.05rem;
+  }
+
+  .nav nav {
+    min-width: 0;
+    overflow-x: auto;
+    gap: 16px;
+    font-size: 0.84rem;
+    scrollbar-width: none;
+    mask-image: linear-gradient(to right, #000 85%, transparent);
+  }
+
+  .nav nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .nav nav a {
+    white-space: nowrap;
+    padding: 6px 0;
+  }
+
+  .nav nav a:last-child {
+    padding-right: 16px;
+  }
+
+  .footer {
+    padding-bottom: 88px;
+  }
+}
