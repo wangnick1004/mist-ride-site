@@ -1,0 +1,121 @@
+.section {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: clamp(24px, 5vw, 72px);
+  align-items: center;
+  padding: 96px clamp(16px, 8vw, 128px);
+  background: var(--brand-deep);
+  color: var(--paper);
+}
+
+.eyebrow {
+  font-family: var(--font-en);
+  font-stretch: 125%;
+  font-weight: 800;
+  font-size: 0.78rem;
+  letter-spacing: 0.28em;
+  color: var(--brand-soft);
+  margin-bottom: 0.6em;
+}
+
+.text h2 {
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  font-weight: 900;
+  color: #fff;
+  margin-bottom: 0.8em;
+}
+
+.list {
+  list-style: none;
+  display: grid;
+  gap: 14px;
+  padding: 0;
+  margin: 0 0 28px;
+  max-width: 640px;
+}
+
+.list li {
+  display: grid;
+  gap: 2px;
+  padding-left: 16px;
+  border-left: 3px solid var(--brand-soft);
+}
+
+.list b {
+  color: #fff;
+}
+
+.list span {
+  color: rgba(238, 243, 241, 0.78);
+  font-size: 0.94rem;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.primary,
+.secondary {
+  display: inline-block;
+  padding: 12px 22px;
+  border-radius: 999px;
+  font-weight: 700;
+  text-decoration: none;
+  text-align: center;
+}
+
+.primary {
+  background: var(--brand-soft);
+  color: var(--brand-deep);
+}
+
+.secondary {
+  border: 2px solid var(--brand-soft);
+  color: var(--brand-soft);
+}
+
+.primary:hover,
+.secondary:hover {
+  filter: brightness(1.08);
+}
+
+.primary:focus-visible,
+.secondary:focus-visible {
+  outline: 3px solid #fff;
+  outline-offset: 3px;
+}
+
+.qr {
+  margin: 0;
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+  padding: 16px;
+  background: #fff;
+  border-radius: 16px;
+}
+
+.qr img {
+  display: block;
+  width: 180px;
+  height: 180px;
+}
+
+.qr figcaption {
+  font-size: 0.82rem;
+  color: var(--ink-soft);
+}
+
+/* 手機上直接按按鈕就會開 LINE，不需要掃碼 */
+@media (max-width: 720px) {
+  .section {
+    grid-template-columns: 1fr;
+    padding: 72px 16px;
+  }
+
+  .qr {
+    display: none;
+  }
+}

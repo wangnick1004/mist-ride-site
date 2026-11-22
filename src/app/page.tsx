@@ -3,6 +3,8 @@ import AssemblyStory from "@/components/AssemblyStory";
 import HelpBot from "@/components/HelpBot";
 import HeroSpray from "@/components/HeroSpray";
 import IngredientsSection from "@/components/IngredientsSection";
+import LineLink from "@/components/LineLink";
+import LineSection from "@/components/LineSection";
 import PlaySection from "@/components/PlaySection";
 import TrialForm from "@/components/TrialForm";
 import styles from "./page.module.css";
@@ -23,6 +25,7 @@ export default function Home() {
           <a href="#assembly">包裝與構造</a>
           <a href="#play">玩模型</a>
           <a href="#trial">試用登記</a>
+          <a href="#line">官方 LINE</a>
         </nav>
       </header>
 
@@ -46,6 +49,9 @@ export default function Home() {
           <p>先登記，產品資訊檔案（PIF）與產品登錄完成後，我們會依名單抽選並通知入選者。</p>
           <TrialForm />
         </section>
+
+        {/* 5. 官方 LINE：客服小霧、分享領券、上市通知 */}
+        <LineSection />
       </main>
 
       <HelpBot />
@@ -53,6 +59,9 @@ export default function Home() {
       <footer className={styles.footer}>
         <p>本產品為一般化粧品，不含防曬成分，日間請另外搭配防曬。成分比例與永續數據以定案配方及檢驗報告為準。</p>
         <p className={styles.slogan}>帽險路上，機不可失——油光廢氣全霧擾</p>
+        <p>
+          <LineLink className={styles.footerLine}>官方 LINE 客服</LineLink>
+        </p>
         <p>© 2026 機不可失 MIST-RIDE</p>
       </footer>
     </>
