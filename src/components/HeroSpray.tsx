@@ -216,7 +216,7 @@ export default function HeroSpray() {
         >
           <Image
             src="/images/hero-commute-v4.jpg"
-            alt="騎機車通勤的女生出門前，對著臉噴一下晨霧化妝水"
+            alt="騎機車通勤的女生出門前，對著臉噴一下機不可失化妝水"
             fill
             priority
             sizes="100vw"
@@ -240,7 +240,7 @@ export default function HeroSpray() {
         <div className={styles.whiteout} style={{ opacity: whiteout }} aria-hidden="true" />
 
         <div className={styles.copy} style={{ opacity: textOut, transform: `translateY(${(1 - textOut) * -24}px)` }}>
-          <p className={styles.kicker}>晨霧 控油化妝水・50 mL</p>
+          <p className={styles.kicker}>機不可失化妝水・50 mL</p>
           <h1 id="hero-title">
             出門前這一噴，
             <br />

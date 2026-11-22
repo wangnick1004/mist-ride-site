@@ -258,7 +258,7 @@ export default function CanScene({ progress }: { progress: MutableRefObject<numb
       camera={{ fov: 28, position: [0.06, 0.11, 0.335], near: 0.01, far: 5 }}
       gl={{ antialias: true, localClippingEnabled: true, toneMapping: THREE.ACESFilmicToneMapping }}
       onCreated={({ camera }) => camera.lookAt(0, 0.075, 0)}
-      aria-label="機不可失晨霧控油化妝水 3D 組裝示意"
+      aria-label="機不可失化妝水 3D 組裝示意"
       role="img"
     >
       <color attach="background" args={["#EAF0EC"]} />

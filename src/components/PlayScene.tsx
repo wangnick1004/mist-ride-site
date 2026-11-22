@@ -226,7 +226,7 @@ export default function PlayScene({
       dpr={[1, 2]}
       camera={{ fov: 30, position: [0.12, 0.13, 0.36], near: 0.01, far: 5 }}
       gl={{ antialias: true, toneMapping: THREE.ACESFilmicToneMapping }}
-      aria-label="可旋轉、拆解的機不可失晨霧噴罐 3D 模型"
+      aria-label="可旋轉、拆解的機不可失化妝水噴罐 3D 模型"
       role="img"
     >
       <color attach="background" args={["#EAF0EC"]} />

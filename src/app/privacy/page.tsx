@@ -5,7 +5,7 @@ import styles from "./privacy.module.css";
 
 export const metadata: Metadata = {
   title: "個人資料蒐集告知事項｜機不可失",
-  description: "機不可失（MIST-RIDE）晨霧控油化妝水試用登記的個人資料蒐集、處理及利用告知（個人資料保護法第 8 條）。",
+  description: "機不可失化妝水（MIST-RIDE）試用登記的個人資料蒐集、處理及利用告知（個人資料保護法第 8 條）。",
 };
 
 // 【】內為上線前需由團隊填寫的資訊
