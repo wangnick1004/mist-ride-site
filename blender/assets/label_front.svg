@@ -1,20 +1,19 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 1020" width="1200" height="2040">
-  <!-- 罐身正面印刷：弧長約 40 mm × 高 68 mm（130° 弧，r = 17.6 mm） -->
-  <rect width="600" height="1020" fill="#F5F0E6"/>
-  <rect x="18" y="18" width="564" height="984" rx="26" fill="none" stroke="#7FBFB3" stroke-width="3"/>
-  <!-- 商標：安全帽弧線、帽簷、道路線、晨霧點 -->
-  <g transform="translate(300 300)">
-    <path d="M-110 0 A110 110 0 0 1 110 0 Z" fill="#1F7A6D"/>
-    <rect x="-128" y="0" width="256" height="20" rx="10" fill="#1F7A6D"/>
-    <path d="M-96 62 L96 62" stroke="#1F7A6D" stroke-width="16" stroke-linecap="round" stroke-dasharray="46 30"/>
-    <circle cx="-60" cy="118" r="9" fill="#7FBFB3"/>
-    <circle cx="0" cy="118" r="9" fill="#7FBFB3"/>
-    <circle cx="60" cy="118" r="9" fill="#7FBFB3"/>
+  <!-- 罐身正面印刷：弧長約 40 mm × 高 68 mm（130° 弧，r = 17.6 mm）｜機不可失 MIST-RIDE -->
+  <rect width="600" height="1020" fill="#17242C"/>
+  <rect x="18" y="18" width="564" height="984" rx="26" fill="none" stroke="#2A9D95" stroke-width="3"/>
+  <!-- 商標：M 機車龍頭（握把、煞車拉桿）＋上方 5 顆霧點 -->
+  <g transform="translate(156 150) scale(2.4)">
+    <path d="M16 96L21 54C22 42 28 36 38 36H42C48 36 51 39 53 44L60 60L67 44C69 39 72 36 78 36H82C92 36 98 42 99 54L104 96" fill="none" stroke="#FFFFFF" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M18.4 75L15.6 99M101.6 75L104.4 99" stroke="#FFFFFF" stroke-width="15" stroke-linecap="round"/>
+    <path d="M31.5 63L29 90M88.5 63L91 90" stroke="#FFFFFF" stroke-width="3.6" stroke-linecap="round"/>
+    <g fill="#5CC6BC"><circle cx="60" cy="24" r="4.6"/><circle cx="50" cy="16" r="3.4"/><circle cx="70" cy="16" r="3.4"/><circle cx="42" cy="8.5" r="2.3"/><circle cx="78" cy="8.5" r="2.3"/></g>
   </g>
-  <text x="300" y="590" text-anchor="middle" font-family="PingFang TC, Noto Sans TC, sans-serif" font-size="128" font-weight="700" fill="#1F5F5B" letter-spacing="24">順路</text>
-  <text x="300" y="672" text-anchor="middle" font-family="PingFang TC, Noto Sans TC, sans-serif" font-size="46" font-weight="600" fill="#1F7A6D" letter-spacing="4">晨霧 控油化妝水</text>
-  <rect x="230" y="706" width="140" height="6" rx="3" fill="#7FBFB3"/>
-  <text x="300" y="770" text-anchor="middle" font-family="PingFang TC, Noto Sans TC, sans-serif" font-size="32" fill="#5E7377">控油・保濕・通勤前 10 秒</text>
-  <text x="300" y="900" text-anchor="middle" font-family="Helvetica Neue, sans-serif" font-size="40" fill="#1F5F5B">50 mL</text>
-  <text x="300" y="952" text-anchor="middle" font-family="Helvetica Neue, PingFang TC, sans-serif" font-size="22" fill="#5E7377" letter-spacing="3">BAG-ON-VALVE ・ 壓縮空氣</text>
+  <text x="300" y="584" text-anchor="middle" font-family="Noto Sans TC, PingFang TC, sans-serif" font-size="112" font-weight="900" fill="#FFFFFF" letter-spacing="8">機不可失</text>
+  <text x="300" y="640" text-anchor="middle" font-family="Archivo, Helvetica Neue, sans-serif" style="font-stretch:125%" font-size="34" font-weight="800" fill="#5CC6BC" letter-spacing="12">MIST-RIDE</text>
+  <text x="300" y="730" text-anchor="middle" font-family="Noto Sans TC, PingFang TC, sans-serif" font-size="44" font-weight="700" fill="#FFFFFF" letter-spacing="4">晨霧 控油化妝水</text>
+  <rect x="240" y="760" width="120" height="6" rx="3" fill="#F3A536"/>
+  <text x="300" y="816" text-anchor="middle" font-family="Noto Sans TC, PingFang TC, sans-serif" font-size="30" fill="#B9C6CB">控油・保濕・戴帽前 3 下</text>
+  <text x="300" y="910" text-anchor="middle" font-family="Archivo, Helvetica Neue, sans-serif" font-size="40" font-weight="700" fill="#F3A536">50 mL</text>
+  <text x="300" y="958" text-anchor="middle" font-family="Archivo, Noto Sans TC, sans-serif" font-size="22" fill="#98A9AF" letter-spacing="3">BAG-ON-VALVE ・ 壓縮空氣</text>
 </svg>

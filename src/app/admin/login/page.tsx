@@ -3,7 +3,7 @@ import LoginForm from "./LoginForm";
 import styles from "../admin.module.css";
 
 export const metadata: Metadata = {
-  title: "後台登入｜順路",
+  title: "後台登入｜機不可失",
   robots: { index: false, follow: false },
 };
 

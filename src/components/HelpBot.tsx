@@ -76,7 +76,7 @@ export default function HelpBot() {
           <header className={styles.head}>
             <div>
               <p id="helpbot-title" className={styles.title}>
-                順路小幫手
+                小霧・騎士客服
               </p>
               <p className={styles.sub}>選擇問題，快速找到答案{LINE_READY ? "，也可以轉到官方 LINE" : ""}</p>
             </div>

@@ -242,12 +242,12 @@ export default function HeroSpray() {
         <div className={styles.copy} style={{ opacity: textOut, transform: `translateY(${(1 - textOut) * -24}px)` }}>
           <p className={styles.kicker}>晨霧 控油化妝水・50 mL</p>
           <h1 id="hero-title">
-            通勤前 10 秒，
+            出門前這一噴，
             <br />
-            給皮膚一陣晨霧。
+            <em>機不可失</em>。
           </h1>
           <p className={styles.lead}>
-            給每天騎車通勤的你：控油、保濕，提升肌膚對環境傷害的保護力。輕壓一下，戴上安全帽就出發。
+            帽險路上，機不可失。給每天騎車通勤的你：戴安全帽前噴 3 下，控油、保濕，提升肌膚對環境傷害的保護力。
           </p>
         </div>
 

@@ -1,4 +1,4 @@
-"""順路 晨霧控油化妝水：50 mL 鋁罐袋式 BOV（壓縮空氣）產品級參數化模型。
+"""機不可失 MIST-RIDE 晨霧控油化妝水（原名：順路）：50 mL 鋁罐袋式 BOV（壓縮空氣）產品級參數化模型。
 
 A 方案（完全噴出）：縱向風琴摺內袋＋袋內全長導流管（外側溝槽、側孔、下端十字開槽），
 化妝水 50 mL 約占罐容積 55%，讓用到最後仍有足夠空氣壓力。
@@ -348,8 +348,8 @@ def material(name, color, metallic=0.0, rough=0.5, transmission=0.0, ior=1.45,
 
 MAT = {
     "can": material("鋁罐_拉絲陽極鼠尾草", "#BCCAC4", metallic=1.0, rough=0.32, aniso=0.6),
-    "print_front": material("罐身印刷_正面", "#F5F0E6", rough=0.38, coat=0.5, image=front_png),
-    "print_back": material("罐身印刷_背面", "#F5F0E6", rough=0.38, coat=0.5, image=back_png),
+    "print_front": material("罐身印刷_正面", "#17242C", rough=0.38, coat=0.5, image=front_png),
+    "print_back": material("罐身印刷_背面", "#EEF3F1", rough=0.38, coat=0.5, image=back_png),
     "cup": material("閥門固定蓋_鋁", "#D4D9D7", metallic=1.0, rough=0.2),
     "housing": material("閥門座_PP", "#EEF0EA", rough=0.45, transmission=0.25),
     "spring": material("閥門彈簧_不鏽鋼", "#C6CBCE", metallic=1.0, rough=0.22),

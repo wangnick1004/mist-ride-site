@@ -2,7 +2,7 @@
  * 官方 LINE 設定。
  *
  * 帳號建立後，只要在 Vercel 的 Environment Variables 加上：
- *   NEXT_PUBLIC_LINE_OA_ID=@你的LINE官方帳號ID   （例如 @shunlu，要包含 @）
+ *   NEXT_PUBLIC_LINE_OA_ID=@你的LINE官方帳號ID   （例如 @mistride，要包含 @）
  * 再重新部署，網站上所有「官方 LINE」按鈕、優惠券、客服都會自動啟用，不必改程式。
  * 尚未設定時，按鈕會顯示「官方 LINE 即將開放」，並改導向試用登記。
  */
