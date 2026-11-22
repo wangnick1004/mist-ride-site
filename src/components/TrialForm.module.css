@@ -104,11 +104,11 @@
   padding: 15px 20px;
   border: 0;
   border-radius: 999px;
-  background: var(--brand);
-  color: #fff;
+  background: var(--amber);
+  color: var(--brand-deep);
   font: inherit;
   font-size: 1.05rem;
-  font-weight: 700;
+  font-weight: 900;
   letter-spacing: 0.08em;
   cursor: pointer;
   transition: background 0.2s;
@@ -116,6 +116,7 @@
 
 .submit:hover {
   background: var(--brand-deep);
+  color: #fff;
 }
 
 .submit:disabled {

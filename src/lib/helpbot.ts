@@ -26,7 +26,7 @@ const BACK: BotOption = { label: "回到主選單", next: "root" };
 export const BOT_NODES: Record<string, BotNode> = {
   root: {
     id: "root",
-    text: ["嗨，我是順路小幫手 👋", "想了解哪一方面呢？"],
+    text: ["嗨騎士，我是小霧 👋", "想了解哪一方面呢？"],
     options: [
       { label: "怎麼使用", next: "use" },
       { label: "適合我的膚質嗎", next: "skin" },

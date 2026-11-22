@@ -15,17 +15,36 @@
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  font-family: var(--font-serif);
-  font-size: 1.25rem;
-  letter-spacing: 0.3em;
   color: var(--brand-deep);
   text-decoration: none;
 }
 
 .brand svg {
   width: 36px;
-  height: 24px;
+  height: 36px;
+  flex: none;
+}
+
+.brandText {
+  display: grid;
+  font-weight: 900;
+  font-size: 1.2rem;
+  letter-spacing: 0.08em;
+  line-height: 1.05;
+}
+
+.brandText small {
+  font-family: var(--font-en);
+  font-stretch: 125%;
+  font-weight: 800;
+  font-size: 0.5rem;
+  letter-spacing: 0.24em;
   color: var(--brand);
+}
+
+.slogan {
+  font-weight: 900;
+  color: var(--brand-deep);
 }
 
 .nav nav {

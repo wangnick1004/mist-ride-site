@@ -1,3 +1,4 @@
+import BrandMark from "@/components/BrandMark";
 import AssemblyStory from "@/components/AssemblyStory";
 import HelpBot from "@/components/HelpBot";
 import HeroSpray from "@/components/HeroSpray";
@@ -10,13 +11,12 @@ export default function Home() {
   return (
     <>
       <header className={styles.nav}>
-        <a href="#top" className={styles.brand} aria-label="順路 首頁">
-          <svg viewBox="0 0 64 40" aria-hidden="true">
-            <path d="M12 22 A20 20 0 0 1 52 22 Z" fill="currentColor" />
-            <rect x="8" y="22" width="48" height="4" rx="2" fill="currentColor" />
-            <path d="M14 33 H50" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeDasharray="9 6" />
-          </svg>
-          順路
+        <a href="#top" className={styles.brand} aria-label="機不可失 MIST-RIDE 首頁">
+          <BrandMark />
+          <span className={styles.brandText}>
+            機不可失
+            <small>MIST-RIDE</small>
+          </span>
         </a>
         <nav aria-label="主要">
           <a href="#ingredients">成分與永續</a>
@@ -52,7 +52,8 @@ export default function Home() {
 
       <footer className={styles.footer}>
         <p>本產品為一般化粧品，不含防曬成分，日間請另外搭配防曬。成分比例與永續數據以定案配方及檢驗報告為準。</p>
-        <p>© 2026 順路</p>
+        <p className={styles.slogan}>帽險路上，機不可失——油光廢氣全霧擾</p>
+        <p>© 2026 機不可失 MIST-RIDE</p>
       </footer>
     </>
   );

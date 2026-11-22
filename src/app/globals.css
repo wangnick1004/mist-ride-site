@@ -1,16 +1,19 @@
-/* 晨霧清透：品牌墨綠、鼠尾草綠、米白，大量留白 */
+/* 機不可失 MIST-RIDE：柏油墨、晨霧青、方向燈琥珀、霧白（見 品牌商標/機不可失/brand-guide.html） */
 :root {
-  --paper: #f5f0e6;
-  --paper-2: #eef2ee;
-  --mist: #dcece6;
-  --line: rgba(31, 95, 91, 0.14);
-  --brand: #1f7a6d;
-  --brand-deep: #1f5f5b;
-  --brand-soft: #7fbfb3;
-  --ink: #2c3a3a;
-  --ink-soft: #5e7377;
-  --font-sans: "PingFang TC", "Noto Sans TC", system-ui, sans-serif;
-  --font-serif: "Songti TC", "Noto Serif TC", "Source Han Serif TC", serif;
+  --paper: #eef3f1; /* 霧白 */
+  --paper-2: #e3ebe8;
+  --mist: #d6e8e5;
+  --line: rgba(23, 36, 44, 0.12);
+  --brand: #1f7f78; /* 晨霧青（文字用加深版） */
+  --brand-deep: #17242c; /* 柏油墨 */
+  --brand-soft: #5cc6bc;
+  --amber: #f3a536; /* 方向燈琥珀：整頁只給最重要的行動按鈕 */
+  --ink: #17242c;
+  --ink-soft: #56686f;
+  --font-sans: var(--font-noto), "PingFang TC", "Noto Sans TC", system-ui, sans-serif;
+  /* 舊稱 serif，改版後標題一律用粗黑體；變數名保留以免動到各元件 */
+  --font-serif: var(--font-noto), "PingFang TC", "Noto Sans TC", system-ui, sans-serif;
+  --font-en: var(--font-archivo), "Helvetica Neue", Arial, sans-serif;
   color-scheme: light;
 }
 
@@ -56,4 +59,11 @@ p {
   html {
     scroll-behavior: auto;
   }
+}
+
+h1,
+h2,
+h3 {
+  font-weight: 900;
+  letter-spacing: 0.02em;
 }

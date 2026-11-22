@@ -4,8 +4,8 @@ import { CONSENT_VERSION } from "@/lib/trial";
 import styles from "./privacy.module.css";
 
 export const metadata: Metadata = {
-  title: "個人資料蒐集告知事項｜順路",
-  description: "順路晨霧控油化妝水試用登記的個人資料蒐集、處理及利用告知（個人資料保護法第 8 條）。",
+  title: "個人資料蒐集告知事項｜機不可失",
+  description: "機不可失（MIST-RIDE）晨霧控油化妝水試用登記的個人資料蒐集、處理及利用告知（個人資料保護法第 8 條）。",
 };
 
 // 【】內為上線前需由團隊填寫的資訊
@@ -20,7 +20,7 @@ export default function PrivacyPage() {
 
       <section>
         <h2>一、蒐集者</h2>
-        <p>順路團隊【團隊或公司正式名稱】（以下稱「我們」）。聯絡方式：【聯絡 Email】。</p>
+        <p>機不可失（MIST-RIDE）團隊【團隊或公司正式名稱】（以下稱「我們」）。聯絡方式：【聯絡 Email】。</p>
       </section>
 
       <section>
