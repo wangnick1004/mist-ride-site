@@ -4,8 +4,10 @@ import { CONSENT_VERSION } from "@/lib/trial";
 import styles from "./privacy.module.css";
 
 export const metadata: Metadata = {
-  title: "個人資料蒐集告知事項｜機不可失",
+  title: "個人資料蒐集告知事項",
   description: "機不可失化妝水（MIST-RIDE）試用登記與官方 LINE 客服的個人資料蒐集、處理及利用告知（個人資料保護法第 8 條）。",
+  alternates: { canonical: "/privacy" },
+  openGraph: { url: "/privacy", title: "個人資料蒐集告知事項｜機不可失 MIST-RIDE" },
 };
 
 const CONTACT_EMAIL = "411313020@gms.ndhu.edu.tw";

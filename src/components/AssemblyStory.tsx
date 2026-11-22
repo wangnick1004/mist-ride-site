@@ -53,7 +53,7 @@ export default function AssemblyStory() {
           <p className={styles.kicker}>拆開來看</p>
           <h2 id="assembly-title" className={styles.title}>
             一罐機不可失化妝水，
-            <br />由 14 個零件組成
+            <br />由 15 個零件組成
           </h2>
 
           <div className={styles.slot} aria-live="polite">

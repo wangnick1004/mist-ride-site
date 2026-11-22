@@ -4,7 +4,7 @@ import Dashboard from "./Dashboard";
 import styles from "./admin.module.css";
 
 export const metadata: Metadata = {
-  title: "試用名單後台｜機不可失",
+  title: "試用名單後台",
   robots: { index: false, follow: false },
 };
 
