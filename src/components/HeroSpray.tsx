@@ -4,12 +4,12 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import styles from "./HeroSpray.module.css";
 
-// 首屏照片（2752 × 1536，Gemini 生成，v3：印刷區為正確商標）上的關鍵位置，單位為原圖像素；換照片時一併更新
-const IMG_W = 2752;
-const IMG_H = 1536;
-const NOZZLE = { x: 1468, y: 456 }; // 噴嘴出口
-const FACE = { x: 1816, y: 448 }; // 霧噴向的位置（臉頰）
-const MIST = { x: 1650, y: 445 }; // 霧團中心：鏡頭推進的焦點
+// 首屏照片（2000 × 1116，Gemini 生成，v4：罐身為機不可失 MIST-RIDE 新標籤）上的關鍵位置，單位為原圖像素；換照片時一併更新
+const IMG_W = 2000;
+const IMG_H = 1116;
+const NOZZLE = { x: 1070, y: 330 }; // 噴嘴出口
+const FACE = { x: 1325, y: 338 }; // 霧噴向的位置（臉頰）
+const MIST = { x: 1200, y: 330 }; // 霧團中心：鏡頭推進的焦點
 // object-position 的水平對齊：桌機讓人物靠右、左側留給標題；手機直式畫面保留噴罐與臉
 const FOCUS_X_DESKTOP = 0.12;
 const FOCUS_X_MOBILE = 0.62;
@@ -110,7 +110,7 @@ export default function HeroSpray() {
       setFocusX(fx);
       ox = (W - IMG_W * s) * fx;
       oy = (H - IMG_H * s) * FOCUS_Y;
-      setZoomAmp(W < 860 ? 1.6 : 2.2); // v3 原圖 2752 px，手機可推近較多仍保持清晰
+      setZoomAmp(W < 860 ? 1.6 : 2.2); // v4 原圖 2000 px
       const m = toScreen(MIST);
       setOrigin(`${((m.x / W) * 100).toFixed(2)}% ${((m.y / H) * 100).toFixed(2)}%`);
     };
@@ -215,7 +215,7 @@ export default function HeroSpray() {
           style={{ transform: `scale(${zoom})`, transformOrigin: origin }}
         >
           <Image
-            src="/images/hero-commute-v3.jpg"
+            src="/images/hero-commute-v4.jpg"
             alt="騎機車通勤的女生出門前，對著臉噴一下晨霧化妝水"
             fill
             priority
